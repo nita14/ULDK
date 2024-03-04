@@ -1,0 +1,42 @@
+﻿<ArcGIS defaultAssembly="ULDKClient.dll" defaultNamespace="ULDKClient" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
+  <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.1.41833">
+    <Name>ULDK Client</Name>
+    <Description>ArcGIS Pro Add-in to consume ULDK service hosted by GUGIK.</Description>
+    <Image>Images\AddinDesktop32.png</Image>
+    <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
+    <Company>Acme</Company>
+    <Date>10/20/2023 9:00:00 PM</Date>
+    <Subject>Content, Framework</Subject>
+    <!-- Note subject can be one or more of these topics:
+                    Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
+  </AddInInfo>
+  <modules>
+    <insertModule id="ULDKClient_Module" className="Module1" autoLoad="false" caption="Module1">
+      <!-- uncomment to have the control hosted on a separate tab-->
+      <tabs>
+        <tab id="ULDKClient_Tab1" caption="ULDK">
+          <group refID="ULDKClient_Group1" />
+        </tab>
+      </tabs>
+      <groups>
+        <!-- comment this out if you have no controls on the Addin tab to avoid
+              an empty group-->
+        <group id="ULDKClient_Group1" caption="Parcel locator service (ULDK)" appearsOnAddInTab="false">
+          <!-- host controls within groups -->
+          <button refID="ULDKClient_ULDKDockpane_ShowButton" size="large" />
+        </group>
+      </groups>
+      <controls>
+        <!-- add your controls here -->
+        <button id="ULDKClient_ULDKDockpane_ShowButton" caption="Show ULDK Dockpane" className="ULDKDockpane_ShowButton" loadOnClick="true" smallImage="EvaluateFeatures32" largeImage="EvaluateFeatures32">
+          <tooltip heading="ULDK dockpane">Activates a dockpane with Parcel Locator Service (ULDK).<disabledText /></tooltip>
+        </button>
+      </controls>
+      <dockPanes>
+        <dockPane id="ULDKClient_ULDKDockpane" caption="Parcel Locator Service (ULDK)" className="ULDKDockpaneViewModel" dock="group" dockWith="esri_core_projectDockPane" hasHelp="true">
+          <content className="ULDKDockpaneView" />
+        </dockPane>
+      </dockPanes>
+    </insertModule>
+  </modules>
+</ArcGIS>
