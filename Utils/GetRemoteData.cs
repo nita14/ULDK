@@ -76,7 +76,7 @@ namespace ULDKClient.Utils
         {
 
             //Get data from the endpoint 
-            Log.Information("Preparing Commune request...");
+            Log.Information("Preparing GetCommuneExtentByIDAsync request...");
             EsriHttpClient esriHttpClient = new EsriHttpClient();
             esriHttpClient.Timeout = TimeSpan.FromSeconds(10);
 

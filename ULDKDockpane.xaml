@@ -46,12 +46,12 @@
                         </Grid.RowDefinitions>
                         <Grid Grid.Column="0" Grid.Row="0" Margin="5,5,5,5">
                             <TextBlock>Select a commune:</TextBlock>
-                        
+
                         </Grid>
                         <Grid Grid.Column="0" Grid.Row="1">
 
-                            <dotNetKitControls:AutoCompleteComboBox SelectedValuePath="Id" TextSearch.TextPath="Name_Full"  ItemsSource="{Binding Communes}"
-                                SelectedItem="{Binding SelectedCommune}" Margin="5,0,5,5" RenderTransformOrigin="0.5,0.5" Height="25" MinWidth="200">
+                            <dotNetKitControls:AutoCompleteComboBox SelectedValuePath="Id" TextSearch.TextPath="Name_Full" ItemsSource="{Binding Communes}"
+                                SelectedItem="{Binding SelectedCommune}" Margin="5,0,5,5" Height="32" MinWidth="200">
                                 <dotNetKitControls:AutoCompleteComboBox.ItemTemplate>
                                     <DataTemplate>
                                         <StackPanel>
@@ -74,11 +74,11 @@
                                 <Grid.RowDefinitions>
                                     <RowDefinition Height="Auto"/>
                                     <RowDefinition Height="Auto"/>
-                                 
+
                                 </Grid.RowDefinitions>
                                 <Grid Grid.Column="0" Grid.Row="0">
                                     <TextBlock Margin="5,5,5,5">Region id:</TextBlock>
-                                   
+
                                 </Grid>
                                 <Grid Grid.Column="0" Grid.Row="1">
                                     <TextBox Height="25" Margin="5,-5,2,2"></TextBox>

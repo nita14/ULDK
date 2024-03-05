@@ -12,26 +12,26 @@ namespace ULDKClient.Utils
     /// </summary>
     class Region
     {
-        private short _Objectid;
-        private string _CommuneId;
-        private string _Name;
-        private string _Number;
+        private long _objectid;
+        private string _communeId;
+        private string _name;
+        private string _number;
 
 
-        public Region(short Objectid, string CommuneId, string Name, string Number)
+        public Region(long objectid, string communeId, string name, string number)
         {
-            _Objectid = Objectid;
-            _CommuneId = CommuneId;
-            _Name = Name;
-            _Number = Number;
+            _objectid = objectid;
+            _communeId = communeId;
+            _name = name;
+            _number = number;
         
         }
 
 
-        public short Objectid { get { return _Objectid; } }
-        public string CommuneId { get { return _CommuneId; } }
-        public string Nazwa {  get { return _Name; } } 
-        public string Numer { get { return _Number; } }
+        public long Objectid { get { return _objectid; } }
+        public string CommuneId { get { return _communeId; } }
+        public string Name {  get { return _name; } } 
+        public string Number { get { return _number; } }
       
   
     }

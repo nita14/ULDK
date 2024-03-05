@@ -61,20 +61,20 @@ namespace ULDKClient
                 string ProjectParentFolder = System.IO.Directory.GetParent(Project.Current.URI).FullName + @"\";
 
 
-                await PrepareAndConfigureLogger(ProjectParentFolder);
-                await CheckOrCreateLocalGDB(ProjectParentFolder);
+                PrepareAndConfigureLogger(ProjectParentFolder);
+                
 
                 //Getting Communes
-                Log.Information("Getting Commune data from a remote URL...");
+                Log.Information("Getting dictionary data from a remote URL...");
                 try
                 {
-                    _communes = GetRemoteData.GetCommuneDataAsync().Result;
+                    _communes = await GetRemoteData.GetCommuneDataAsync();
                     Log.Information("Communes downloaded: {0}.", _communes.Count());
 
-                    _regions = GetRemoteData.GetRegionDataAsync().Result;
+                    _regions = await GetRemoteData.GetRegionDataAsync();
                     Log.Information("Regions downloaded: {0}.", _regions.Count());
 
-
+                    await CheckOrCreateLocalGDB(ProjectParentFolder);
 
                     _isInitialized = true;
 
@@ -150,7 +150,7 @@ namespace ULDKClient
         /// Creates a logger and saves a log to the current project's folder
         /// </summary>
         /// <returns></returns>
-        private async static Task PrepareAndConfigureLogger(string projectParentFolder)
+        private static void PrepareAndConfigureLogger(string projectParentFolder)
         {
 
 
@@ -267,7 +267,28 @@ namespace ULDKClient
             get => _heading;
             set => SetProperty(ref _heading, value);
         }
+        //Region dropdwon handlers
+        private ObservableCollection<Region> _regions = new ObservableCollection<Region>();
+        public ObservableCollection<Region> Regions
+        {
 
+            get => _regions;
+            set => SetProperty(ref _regions, value, () => Regions);
+
+
+        }
+
+        private Region _selectedRegion;
+        public Region SelectedRegion
+        {
+            get => _selectedRegion;
+            set
+            {
+
+                SetProperty(ref _selectedRegion, value, () => SelectedRegion);
+
+            }
+        }
 
         //Commune dropdwon handlers
         private ObservableCollection<Commune> _communes = new ObservableCollection<Commune>();
@@ -291,36 +312,16 @@ namespace ULDKClient
                 if (value != null) {
                     ZoomToCommuneExtent(value.Id);
                     //Update list of regions based on commune id
-                    value.Id = 0;
-                    Regions.Where(r => r.Gminaid .Category.Equals("MyCategory"));)
+
+                    List<Region> filtered = Regions.Where(r => r.CommuneId.Equals(value.Id)).ToList();
+                    filtered.Count();
 
                 }
             }
         }
 
 
-        //Region dropdwon handlers
-        private ObservableCollection<Region> _regions = new ObservableCollection<Region>();
-        public ObservableCollection<Region> Regions
-        {
-
-            get => _regions;
-            set => SetProperty(ref _regions, value, () => Regions);
-
-
-        }
-
-        private Region _selectedRegion;
-        public Region SelectedRegion
-        {
-            get => _selectedRegion;
-            set
-            {
-
-                SetProperty(ref _selectedRegion, value, () => SelectedRegion);
-               
-            }
-        }
+      
 
         private static async void ZoomToCommuneExtent(string id)
         {
