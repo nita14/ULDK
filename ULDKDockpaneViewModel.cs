@@ -1,6 +1,8 @@
 ﻿using ActiproSoftware.Products.Ribbon;
 using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
+using ArcGIS.Core.Data.DDL;
+using ArcGIS.Core.Data.Exceptions;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Catalog;
 using ArcGIS.Desktop.Core;
@@ -21,6 +23,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using System.Security.Policy;
 using System.Text;
@@ -54,7 +57,12 @@ namespace ULDKClient
         {
             if (!_isInitialized)
             {
-                await PrepareAndConfigureLogger();
+
+                string ProjectParentFolder = System.IO.Directory.GetParent(Project.Current.URI).FullName + @"\";
+
+
+                await PrepareAndConfigureLogger(ProjectParentFolder);
+                await CheckOrCreateLocalGDB(ProjectParentFolder);
 
                 //Getting Communes
                 Log.Information("Getting Commune data from a remote URL...");
@@ -62,20 +70,22 @@ namespace ULDKClient
                 {
                     _communes = GetRemoteData.GetCommuneDataAsync().Result;
                     Log.Information("Communes downloaded: {0}.", _communes.Count());
+
+                    _regions = GetRemoteData.GetRegionDataAsync().Result;
+                    Log.Information("Regions downloaded: {0}.", _regions.Count());
+
+
+
                     _isInitialized = true;
 
 
                 }
                 catch (Exception ex)
                 {
-
-
                     //string errormsg = Resources.ResourceManager
                     ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_ERROR);
                     Log.Fatal(ex.InnerException.Message);
                     Log.Fatal(ex.StackTrace.ToString());
-
-
                 };
 
 
@@ -140,24 +150,113 @@ namespace ULDKClient
         /// Creates a logger and saves a log to the current project's folder
         /// </summary>
         /// <returns></returns>
-        private async static Task PrepareAndConfigureLogger()
+        private async static Task PrepareAndConfigureLogger(string projectParentFolder)
         {
 
 
-            string CurrentDateTime = DateTime.Now.ToString("yyyy''MM''dd'T'HH'-'mm'-'ss");
+            string CurrentDateTime = DateTime.Now.ToString("yyyy'-'MM'-'dd'T'HH'-'mm'-'ss");
             var detector = new Utils.LogErrorDetector();
-            string folder = System.IO.Directory.GetParent(Project.Current.URI).FullName + @"\";
+
+            //check or create an ULDK directory
+            System.IO.Directory.CreateDirectory(Path.Join(projectParentFolder, "ULDK"));
 
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-                .WriteTo.File(folder + "ULDK_" + CurrentDateTime + ".txt")  // log file.
+                .WriteTo.File(Path.Join(projectParentFolder,"ULDK","ULDK_log_" + CurrentDateTime + ".txt")) // log file.
                 .WriteTo.Sink(detector)
                 .CreateLogger();
 
             Log.Information("ULDK plugin v.1.0.");
-            Log.Information("Initilizing UI...");
+            Log.Information("Project URL is: " + projectParentFolder);
+
 
         }
+
+        /// <summary>
+        /// Checks if the file gdb exists, if not creates it with feature class
+        /// </summary>
+        /// <param name="projectParentFolder"></param>
+        /// <returns></returns>
+        private async static Task CheckOrCreateLocalGDB(string projectParentFolder) 
+        
+        {
+
+            string gdbPath = Path.Combine(projectParentFolder, "ULDK", "ULDK.gdb");
+
+            if (Directory.Exists(gdbPath))
+            {
+                Log.Information("File GDB already exists.");
+
+                await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+                {
+                    new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
+                });
+                
+
+            }
+            else {
+
+                Log.Information("File GDB does not exists. Creating...");
+
+
+                FileGeodatabaseConnectionPath fileGdbConnectionPath =
+                    new FileGeodatabaseConnectionPath(new System.Uri(gdbPath));
+
+                try
+                {
+
+                    using (Geodatabase geodatabase =
+                        SchemaBuilder.CreateGeodatabase(fileGdbConnectionPath))
+
+                    {
+                    }
+
+                }
+                catch (GeodatabaseWorkspaceException ex)
+                {
+                    Log.Information("File gdb already exists. Path: " + fileGdbConnectionPath.ToString());
+                }
+                catch (GeodatabaseException gex)
+                {
+                    Log.Fatal("A geodatabase-related exception has occurred.");
+                    Log.Fatal(gex.Message.ToLower());
+                }
+                catch (Exception aex){
+                    Log.Fatal("Another fatal error occurred.");
+                    Log.Fatal(aex.GetType().FullName);
+                    Log.Fatal(aex.Message.ToLower());
+                }
+
+                Log.Information("File GDB created. Path: " + fileGdbConnectionPath.Path.AbsolutePath);
+
+            }
+
+            //check or create Results feature class
+            Log.Information("Checking if the results feature class already exists...");
+            bool fcExists = await Utils.Helpers.FeatureClassExistsAsync(gdbPath, Utils.Constants.FC_RESULTS_NAME);
+
+            if (fcExists)
+            {
+                Log.Information("The results feature class already exists.");
+            }
+            else {
+                Log.Information("The results feature class needs to be created.");
+                bool fcCreated = await Utils.Helpers.CreateResultsFeatureClassAsync(gdbPath, Utils.Constants.FC_RESULTS_NAME);
+
+                if (fcCreated)
+                {
+                    Log.Information("The results feature class has been created.");
+                }
+                else {
+                    Log.Fatal("The results feature class has NOT been created.");
+
+                }
+
+            }
+            Log.Information("Initilizing UI...");
+        }
+
+
 
         /// <summary>
         /// Text shown near the top of the DockPane.
@@ -169,6 +268,8 @@ namespace ULDKClient
             set => SetProperty(ref _heading, value);
         }
 
+
+        //Commune dropdwon handlers
         private ObservableCollection<Commune> _communes = new ObservableCollection<Commune>();
         public ObservableCollection<Commune> Communes
         {
@@ -188,15 +289,36 @@ namespace ULDKClient
 
                 SetProperty(ref _selectedCommune, value, () => SelectedCommune);
                 if (value != null) {
+                    ZoomToCommuneExtent(value.Id);
+                    //Update list of regions based on commune id
+                    value.Id = 0;
+                    Regions.Where(r => r.Gminaid .Category.Equals("MyCategory"));)
 
-
-
-
-
-                    ZoomToCommuneExtent(value.Id); 
-                
                 }
+            }
+        }
 
+
+        //Region dropdwon handlers
+        private ObservableCollection<Region> _regions = new ObservableCollection<Region>();
+        public ObservableCollection<Region> Regions
+        {
+
+            get => _regions;
+            set => SetProperty(ref _regions, value, () => Regions);
+
+
+        }
+
+        private Region _selectedRegion;
+        public Region SelectedRegion
+        {
+            get => _selectedRegion;
+            set
+            {
+
+                SetProperty(ref _selectedRegion, value, () => SelectedRegion);
+               
             }
         }
 
@@ -214,11 +336,6 @@ namespace ULDKClient
 
                 await mapView.ZoomToAsync(poly, TimeSpan.FromSeconds(1));
             });
-
-
-
-
-
         }
     }
 
@@ -230,9 +347,6 @@ namespace ULDKClient
         protected override void OnClick()
         {
             ULDKDockpaneViewModel.Show();
-
-
-
         }
     }
 }
