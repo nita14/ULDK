@@ -12,6 +12,8 @@ using Serilog;
 using System.Collections.ObjectModel;
 using ArcGIS.Core.Geometry;
 using System.Globalization;
+using System.Web;
+using System.Text.RegularExpressions;
 
 namespace ULDKClient.Utils
 {
@@ -68,26 +70,38 @@ namespace ULDKClient.Utils
         }
 
         /// <summary>
-        /// Gets commune extent by the TERYT id
+        /// Get TERC extent by the id and type (commune, region)
         /// </summary>
-        /// <param name="communeId"></param>
+        /// <param name="tercId"></param>
+        /// <param name="tercType"></param>
         /// <returns></returns>
-        public async static Task<Polygon> GetCommuneExtentByIDAsync(string communeId)
+        public async static Task<Polygon> GetTercExtentByIDAsync(string tercId, string tercType, SpatialReference spatialReference2180)
         {
 
             //Get data from the endpoint 
-            Log.Information("Preparing GetCommuneExtentByIDAsync request...");
+            Log.Information("Preparing GetTercExtentByIDAsync request...");
             EsriHttpClient esriHttpClient = new EsriHttpClient();
             esriHttpClient.Timeout = TimeSpan.FromSeconds(10);
 
-            EsriHttpResponseMessage responseMessage = esriHttpClient.Get(Constants.FIND_COMMUNE_BY_ID_ULDK_URL + communeId);
+            string requestURL;
+
+            if (tercType == "Commune")
+            {
+                requestURL = Constants.FIND_COMMUNE_BY_ID_ULDK_URL + tercId;
+            }
+            else {
+                requestURL = Constants.FIND_REGION_BY_ID_ULDK_URL + tercId;
+
+            } 
+
+            EsriHttpResponseMessage responseMessage = esriHttpClient.Get(requestURL);
             responseMessage.EnsureSuccessStatusCode();
 
             var response = await responseMessage.Content.ReadAsStringAsync();
             var status = response.Split("\n")[0];
 
             if (status != "0") { 
-                Log.Fatal("GetCommuneExtentByIDAsync error. Status different than 0.");
+                Log.Fatal("GetTercExtentByIDAsync error. Status different than 0.");
                 return null;
             
             }
@@ -100,12 +114,53 @@ namespace ULDKClient.Utils
             // Create an envelope
             Envelope env = EnvelopeBuilderEx.CreateEnvelope(minPt, maxPt);
             PolygonBuilderEx polygonBuilderEx = new PolygonBuilderEx(env);
-            polygonBuilderEx.SpatialReference = new SpatialReferenceBuilder(2180).ToSpatialReference();
+            polygonBuilderEx.SpatialReference = spatialReference2180;
             Polygon polygonFromEnv = polygonBuilderEx.ToGeometry() as Polygon;
-
             return polygonFromEnv;
 
         }
 
+        public static async Task<Polygon> GetParcelByIdAsync(string parcelIdFull, SpatialReference spatialReference2180)
+        {
+            //Get data from the endpoint 
+            Log.Information("Preparing GetParcelByIdAsync request...");
+            EsriHttpClient esriHttpClient = new EsriHttpClient();
+            esriHttpClient.Timeout = TimeSpan.FromSeconds(10);
+
+
+            Log.Information("Request URL is: " + Constants.FIND_PARCEL_BY_ID_ULDK_URL + parcelIdFull);
+            EsriHttpResponseMessage responseMessage = esriHttpClient.Get(Constants.FIND_PARCEL_BY_ID_ULDK_URL + parcelIdFull);
+            
+            responseMessage.EnsureSuccessStatusCode();
+
+            var response = await responseMessage.Content.ReadAsStringAsync();
+            var status = response.Split("\n")[0];
+
+            if (status.Substring(0,1) != "1")
+            {
+                Log.Fatal("GetParcelByIdAsync error. Status different than 1.");
+                return null;
+
+            }
+
+            string geomCoords = response.Split("\n")[1].Split(";")[1];
+            Regex regex = new Regex(@"[0-9]+\.[0-9]+ [0-9]+\.[0-9]+");
+            List<Match> matches = regex.Matches(geomCoords).ToList();
+
+            List<MapPoint> mapPoints = new List<MapPoint>();
+
+            foreach (Match match in matches) {
+                string[] coords = match.Value.Split(" ");
+                MapPoint pt = MapPointBuilderEx.CreateMapPoint(Convert.ToDouble(coords[0], CultureInfo.InvariantCulture), Convert.ToDouble(coords[1], CultureInfo.InvariantCulture));
+                mapPoints.Add(pt);
+            }
+
+            PolygonBuilderEx polygonBuilder = new PolygonBuilderEx(mapPoints,AttributeFlags.None, spatialReference2180);
+            Polygon poly = polygonBuilder.ToGeometry() as Polygon;
+            return poly;
+
+
+
+        }
     }
 }

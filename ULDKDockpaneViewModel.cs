@@ -17,6 +17,7 @@ using ArcGIS.Desktop.Internal.Mapping;
 using ArcGIS.Desktop.Internal.Mapping.Georeference;
 using ArcGIS.Desktop.Layouts;
 using ArcGIS.Desktop.Mapping;
+using Microsoft.VisualBasic;
 using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
@@ -30,6 +31,8 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Data;
+using System.Windows.Input;
 using ULDKClient.Utils;
 using MessageBox = ArcGIS.Desktop.Framework.Dialogs.MessageBox;
 
@@ -39,7 +42,9 @@ namespace ULDKClient
     {
         private const string _dockPaneID = "ULDKClient_ULDKDockpane";
         private bool _isInitialized = false;
-        
+        public static SpatialReference _spatialReference2180 = null;
+        public static GraphicsLayer _graphicsLayer = null;
+        public static Map _currentMap = null;
 
 
 
@@ -77,6 +82,15 @@ namespace ULDKClient
                     await CheckOrCreateLocalGDB(ProjectParentFolder);
 
                     _isInitialized = true;
+
+
+                    await QueuedTask.Run(async () =>
+                    {
+                       _spatialReference2180 = new SpatialReferenceBuilder(2180).ToSpatialReference();
+                       _currentMap = MapView.Active.Map;
+                       _graphicsLayer = Helpers.GetGraphicsLayer(_currentMap);
+                    });
+
 
 
                 }
@@ -266,8 +280,36 @@ namespace ULDKClient
         {
             get => _heading;
             set => SetProperty(ref _heading, value);
+        }        
+        
+        private string _parcelIdFull = "";
+        public string ParcelIdFull
+        {
+            get => _parcelIdFull;
+            set => SetProperty(ref _parcelIdFull, value);
+        }        
+        
+        private string _parcelId = "";
+        public string ParcelId
+        {
+            get => _parcelId;
+            set 
+                
+                { 
+                
+                SetProperty(ref _parcelId, value);
+
+                if (value != null && value.Length > 0 && ParcelIdFull.Split(".").Length == 2) {
+                    ParcelIdFull += "." + value;
+                } else if (value != null && value.Length > 0 && ParcelIdFull.Split(".").Length > 2) {
+                    ParcelIdFull = ParcelIdFull.Split(".")[0] + "." + ParcelIdFull.Split(".")[1] + "." + value;
+                }
+                
+
+                }
         }
         //Region dropdwon handlers
+
         private ObservableCollection<Region> _regions = new ObservableCollection<Region>();
         public ObservableCollection<Region> Regions
         {
@@ -278,6 +320,7 @@ namespace ULDKClient
 
         }
 
+        
         private Region _selectedRegion;
         public Region SelectedRegion
         {
@@ -287,8 +330,18 @@ namespace ULDKClient
 
                 SetProperty(ref _selectedRegion, value, () => SelectedRegion);
 
+                if (value != null)
+                {
+                    ParcelIdFull += "." + value.Number;
+                    ParcelId = "";
+                    ZoomToTercExtent(value.CommuneId + "." + value.Number, "Region");
+
+                }
             }
         }
+
+
+
 
         //Commune dropdwon handlers
         private ObservableCollection<Commune> _communes = new ObservableCollection<Commune>();
@@ -310,26 +363,36 @@ namespace ULDKClient
 
                 SetProperty(ref _selectedCommune, value, () => SelectedCommune);
                 if (value != null) {
-                    ZoomToCommuneExtent(value.Id);
+
+                    ParcelIdFull = value.Id;
+                    ParcelId = "";
+                    ZoomToTercExtent(value.Id, "Commune");
                     //Update list of regions based on commune id
 
-                    List<Region> filtered = Regions.Where(r => r.CommuneId.Equals(value.Id)).ToList();
-                    filtered.Count();
+                    CollectionView regionsOriginalView = (CollectionView)CollectionViewSource.GetDefaultView(Regions);
+                    regionsOriginalView.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(Region.Number), ListSortDirection.Ascending));
 
+                    regionsOriginalView.Filter = r => {
+
+                        Region vRegion = r as Region;
+                        return (vRegion != null && vRegion.CommuneId == value.Id);
+
+                        };
+                    int cnt = regionsOriginalView.Count;
+                    
+               
                 }
             }
         }
 
 
-      
-
-        private static async void ZoomToCommuneExtent(string id)
+        private static async void ZoomToTercExtent(string id, string TercType)
         {
 
             await QueuedTask.Run(async () =>
             {
 
-                Polygon poly = await GetRemoteData.GetCommuneExtentByIDAsync(id);
+                Polygon poly = await GetRemoteData.GetTercExtentByIDAsync(id, TercType, _spatialReference2180);
                 //Get the active map view.
                 var mapView = MapView.Active;
                 if (mapView == null || poly ==null)
@@ -338,6 +401,36 @@ namespace ULDKClient
                 await mapView.ZoomToAsync(poly, TimeSpan.FromSeconds(1));
             });
         }
+
+        //button click handlers
+
+        public ICommand CmdShowParcelOnTheMap
+        {
+            get
+            {
+                return new RelayCommand(async () =>
+                {
+
+
+                    if (ParcelIdFull != null && ParcelIdFull != "" && ParcelIdFull.Split(".").Length == 3)
+                    {
+                        //execute command
+                        Polygon geom = await GetRemoteData.GetParcelByIdAsync(ParcelIdFull, _spatialReference2180);
+                        var mapView = MapView.Active;
+                        await mapView.ZoomToAsync(geom, TimeSpan.FromSeconds(1));
+
+                        //process the geometry
+                        await Helpers.AddGeometrytoGraphicsAsync(_graphicsLayer, geom, ParcelId);
+                    }
+                    else
+                    {
+                        ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_ERROR);
+
+                    }
+                });
+            }
+        }
+
     }
 
     /// <summary>

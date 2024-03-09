@@ -9,7 +9,13 @@
     <NoWarn>CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Images\geoportal.png" />
+  </ItemGroup>
+  <ItemGroup>
     <Content Include="Config.daml" />
+    <Resource Include="Images\geoportal.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />

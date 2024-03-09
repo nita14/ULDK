@@ -1,13 +1,17 @@
-﻿using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.CIM;
+using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Core;
+using ArcGIS.Desktop.Layouts;
+using ArcGIS.Desktop.Mapping;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using FieldDescription = ArcGIS.Core.Data.DDL.FieldDescription;
 
 namespace ULDKClient.Utils
 {
@@ -108,7 +112,58 @@ namespace ULDKClient.Utils
 
         }
 
-        
+        public static GraphicsLayer GetGraphicsLayer(Map map)
+        {
+            if (map == null) return null;
+            var graphicsLyr = map.GetLayersAsFlattenedList().OfType<GraphicsLayer>().FirstOrDefault();
+            if (graphicsLyr == null)
+            {
+                var graphicsLayerCreationParams = new GraphicsLayerCreationParams { Name = "ULDK" };
+                graphicsLyr = LayerFactory.Instance.CreateLayer<GraphicsLayer>(graphicsLayerCreationParams, map);
+            }
+            return graphicsLyr;
+        }
 
+        public static async Task<bool> AddGeometrytoGraphicsAsync(GraphicsLayer graphicsLayer, Polygon geom,string parcelId)
+        {
+
+            bool result = false;
+            try
+            {
+
+                await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+                {
+                    CIMStroke outlineStroke = SymbolFactory.Instance.ConstructStroke(CIMColor.CreateRGBColor(255,0,0), 1.1, SimpleLineStyle.Solid);
+                    var polySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(CIMColor.CreateRGBColor(255, 0, 0), SimpleFillStyle.Null, outlineStroke);
+                    var polyGraphic = new CIMPolygonGraphic
+                    {
+                        Polygon = geom,
+                        Symbol = polySymbol.MakeSymbolReference()
+                    };
+
+                    //add text symbol
+
+                    CIMTextSymbol pointSym = SymbolFactory.Instance.ConstructTextSymbol(ColorFactory.Instance.RedRGB, 24, "Comic Sans MS", "Regular");
+                    var pointGraphic = new CIMTextGraphic
+                    {
+                        Shape = geom.Extent.Center,
+                        Symbol = pointSym.MakeSymbolReference(),
+                        Text = parcelId,
+
+                    };
+
+                    graphicsLayer.AddElement(polyGraphic);
+                    graphicsLayer.AddElement(pointGraphic);
+
+                });
+            }
+            catch (Exception ex)
+            {
+                log.Fatal(ex.StackTrace.ToString());
+
+            }
+
+            return result;
+        }
     }
 }

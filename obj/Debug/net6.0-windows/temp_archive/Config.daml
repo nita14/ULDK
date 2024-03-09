@@ -11,10 +11,10 @@
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
   </AddInInfo>
   <modules>
-    <insertModule id="ULDKClient_Module" className="Module1" autoLoad="false" caption="Module1">
+    <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1">
       <!-- uncomment to have the control hosted on a separate tab-->
       <tabs>
-        <tab id="ULDKClient_Tab1" caption="ULDK">
+        <tab id="ULDKClient_Tab1" caption="ULDK" keytip="Shows ULDK pane">
           <group refID="ULDKClient_Group1" />
         </tab>
       </tabs>
