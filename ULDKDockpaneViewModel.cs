@@ -45,6 +45,7 @@ namespace ULDKClient
         public static SpatialReference _spatialReference2180 = null;
         public static GraphicsLayer _graphicsLayer = null;
         public static Map _currentMap = null;
+        public static string projectParentFolder = null;
 
 
 
@@ -63,11 +64,12 @@ namespace ULDKClient
             if (!_isInitialized)
             {
 
-                string ProjectParentFolder = System.IO.Directory.GetParent(Project.Current.URI).FullName + @"\";
+                projectParentFolder = System.IO.Directory.GetParent(Project.Current.URI).FullName + @"\";
 
 
-                PrepareAndConfigureLogger(ProjectParentFolder);
-                
+                PrepareAndConfigureLogger(projectParentFolder);
+
+                _isInitialized = true;
 
                 //Getting Communes
                 Log.Information("Getting dictionary data from a remote URL...");
@@ -79,11 +81,9 @@ namespace ULDKClient
                     _regions = await GetRemoteData.GetRegionDataAsync();
                     Log.Information("Regions downloaded: {0}.", _regions.Count());
 
-                    await CheckOrCreateLocalGDB(ProjectParentFolder);
+                    await CheckOrCreateLocalGDB(projectParentFolder);
 
-                    _isInitialized = true;
-
-
+                   
                     await QueuedTask.Run(async () =>
                     {
                        _spatialReference2180 = new SpatialReferenceBuilder(2180).ToSpatialReference();
@@ -97,7 +97,7 @@ namespace ULDKClient
                 catch (Exception ex)
                 {
                     //string errormsg = Resources.ResourceManager
-                    ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_ERROR);
+                    ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_REGION_ERROR);
                     Log.Fatal(ex.InnerException.Message);
                     Log.Fatal(ex.StackTrace.ToString());
                 };
@@ -172,11 +172,11 @@ namespace ULDKClient
             var detector = new Utils.LogErrorDetector();
 
             //check or create an ULDK directory
-            System.IO.Directory.CreateDirectory(Path.Join(projectParentFolder, "ULDK"));
+            System.IO.Directory.CreateDirectory(Path.Join(projectParentFolder, "GUGIK"));
 
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-                .WriteTo.File(Path.Join(projectParentFolder,"ULDK","ULDK_log_" + CurrentDateTime + ".txt")) // log file.
+                .WriteTo.File(Path.Join(projectParentFolder, "GUGIK", "ULDK_log_" + CurrentDateTime + ".txt")) // log file.
                 .WriteTo.Sink(detector)
                 .CreateLogger();
 
@@ -195,7 +195,7 @@ namespace ULDKClient
         
         {
 
-            string gdbPath = Path.Combine(projectParentFolder, "ULDK", "ULDK.gdb");
+            string gdbPath = Path.Combine(projectParentFolder, "GUGIK", "GUGIK.gdb");
 
             if (Directory.Exists(gdbPath))
             {
@@ -270,17 +270,7 @@ namespace ULDKClient
             Log.Information("Initilizing UI...");
         }
 
-
-
-        /// <summary>
-        /// Text shown near the top of the DockPane.
-        /// </summary>
-        private string _heading = "My DockPane";
-        public string Heading
-        {
-            get => _heading;
-            set => SetProperty(ref _heading, value);
-        }        
+     
         
         private string _parcelIdFull = "";
         public string ParcelIdFull
@@ -415,16 +405,51 @@ namespace ULDKClient
                     if (ParcelIdFull != null && ParcelIdFull != "" && ParcelIdFull.Split(".").Length == 3)
                     {
                         //execute command
-                        Polygon geom = await GetRemoteData.GetParcelByIdAsync(ParcelIdFull, _spatialReference2180);
+                        Parcel parcel = await GetRemoteData.GetParcelByIdAsync(ParcelIdFull, _spatialReference2180);
+
+                        //parcel with the specified id does not exist
+                        if (parcel == null) {
+                            ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.PARCEL_ID_NOT_EXIST_ERROR);
+                            Log.Information("Cannot find parcel with the id: " + ParcelIdFull);
+                        }
+
+                        Log.Information("Found a parcel with the id: " + ParcelIdFull);
                         var mapView = MapView.Active;
-                        await mapView.ZoomToAsync(geom, TimeSpan.FromSeconds(1));
+                        mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
 
                         //process the geometry
-                        await Helpers.AddGeometrytoGraphicsAsync(_graphicsLayer, geom, ParcelId);
+                        bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(_graphicsLayer, parcel.Geom, parcel.Id);
+                        if (isGraphicadded)
+                        {
+                            Log.Information("Parcel added to graphics layer.");
+
+                        }
+                        else {
+
+                            Log.Information("Cannot add a parcel to graphics layer.");
+                        }
+
+                        
+
+                        bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, projectParentFolder);
+                        if (isFeatureAdded)
+                        {
+                            Log.Information("Parcel added to feature class.");
+
+                        }
+                        else
+                        {
+
+                            Log.Information("Cannot add a parcel to feature class.");
+                        }
+
+     
+
+
                     }
                     else
                     {
-                        ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_ERROR);
+                        ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_REGION_ERROR);
 
                     }
                 });

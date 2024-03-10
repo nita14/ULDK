@@ -20,8 +20,7 @@ namespace ULDKClient.Utils
     class GetRemoteData
     {
 
-        private static readonly ILogger log = Log.ForContext<GetRemoteData>();
-
+ 
         /// <summary>
         /// Gets communes dictionary from a remote endpoint
         /// </summary>
@@ -92,8 +91,8 @@ namespace ULDKClient.Utils
             else {
                 requestURL = Constants.FIND_REGION_BY_ID_ULDK_URL + tercId;
 
-            } 
-
+            }
+            Log.Information("Request URL is: " + requestURL);
             EsriHttpResponseMessage responseMessage = esriHttpClient.Get(requestURL);
             responseMessage.EnsureSuccessStatusCode();
 
@@ -120,9 +119,10 @@ namespace ULDKClient.Utils
 
         }
 
-        public static async Task<Polygon> GetParcelByIdAsync(string parcelIdFull, SpatialReference spatialReference2180)
+        public static async Task<Parcel> GetParcelByIdAsync(string parcelIdFull, SpatialReference spatialReference2180)
         {
             //Get data from the endpoint 
+
             Log.Information("Preparing GetParcelByIdAsync request...");
             EsriHttpClient esriHttpClient = new EsriHttpClient();
             esriHttpClient.Timeout = TimeSpan.FromSeconds(10);
@@ -136,9 +136,9 @@ namespace ULDKClient.Utils
             var response = await responseMessage.Content.ReadAsStringAsync();
             var status = response.Split("\n")[0];
 
-            if (status.Substring(0,1) != "1")
+            if (status.Substring(0,1) == "-1")
             {
-                Log.Fatal("GetParcelByIdAsync error. Status different than 1.");
+                Log.Fatal("GetParcelByIdAsync error. Cannot find the parcel with the id provided.");
                 return null;
 
             }
@@ -157,10 +157,14 @@ namespace ULDKClient.Utils
 
             PolygonBuilderEx polygonBuilder = new PolygonBuilderEx(mapPoints,AttributeFlags.None, spatialReference2180);
             Polygon poly = polygonBuilder.ToGeometry() as Polygon;
-            return poly;
 
+            //get attributes
+            Regex regexattr = new Regex(@"\|.{0,}");
+            List<Match> matchesattr = regexattr.Matches(geomCoords).ToList();
+            string[] attrs = matchesattr[0].Value.Split("|");
 
-
-        }
+            Parcel parcel = new Parcel(parcelIdFull.Split(".")[2], parcelIdFull, attrs[1], attrs[2], attrs[3], attrs[4], DateTime.Now, poly);
+            return parcel;
+         }
     }
 }

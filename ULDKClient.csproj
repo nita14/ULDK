@@ -18,6 +18,8 @@
     </Resource>
   </ItemGroup>
   <ItemGroup>
+    <PackageReference Include="CefSharp.Common" Version="121.3.130" />
+    <PackageReference Include="CefSharp.Wpf" Version="121.3.130" />
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />
     <PackageReference Include="Newtonsoft.Json" Version="13.0.1" />
     <PackageReference Include="Serilog" Version="3.0.1" />

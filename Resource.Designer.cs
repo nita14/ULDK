@@ -61,11 +61,20 @@ namespace ULDKClient {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to BLA.
+        ///   Looks up a localized string similar to Unable to fetch commune and region data from a remote location. Check the Internet access and whitelist connection to *.github.com.
         /// </summary>
-        internal static string COMMUNE_ERROR {
+        internal static string COMMUNE_REGION_ERROR {
             get {
-                return ResourceManager.GetString("COMMUNE_ERROR", resourceCulture);
+                return ResourceManager.GetString("COMMUNE_REGION_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Cannot find the parcel with the provided id. Please check if it is correct..
+        /// </summary>
+        internal static string PARCEL_ID_NOT_EXIST_ERROR {
+            get {
+                return ResourceManager.GetString("PARCEL_ID_NOT_EXIST_ERROR", resourceCulture);
             }
         }
     }

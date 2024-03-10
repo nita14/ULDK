@@ -117,7 +117,10 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
-  <data name="COMMUNE_ERROR" xml:space="preserve">
-    <value>BLA</value>
+  <data name="COMMUNE_REGION_ERROR" xml:space="preserve">
+    <value>Unable to fetch commune and region data from a remote location. Check the Internet access and whitelist connection to *.github.com</value>
+  </data>
+  <data name="PARCEL_ID_NOT_EXIST_ERROR" xml:space="preserve">
+    <value>Cannot find the parcel with the provided id. Please check if it is correct.</value>
   </data>
 </root>

@@ -50,6 +50,14 @@
         "net6.0-windows7.0": {
           "targetAlias": "net6.0-windows",
           "dependencies": {
+            "CefSharp.Common": {
+              "target": "Package",
+              "version": "[121.3.130, )"
+            },
+            "CefSharp.Wpf": {
+              "target": "Package",
+              "version": "[121.3.130, )"
+            },
             "DotNetKit.Wpf.AutoCompleteComboBox": {
               "target": "Package",
               "version": "[1.6.0, )"
