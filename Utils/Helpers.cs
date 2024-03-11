@@ -3,26 +3,20 @@ using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Data.Exceptions;
 using ArcGIS.Core.Geometry;
-using ArcGIS.Core.Internal.CIM;
 using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Internal.Layouts.Control;
-using ArcGIS.Desktop.Internal.Mapping;
-using ArcGIS.Desktop.Layouts;
 using ArcGIS.Desktop.Mapping;
 using Serilog;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
 using FieldDescription = ArcGIS.Core.Data.DDL.FieldDescription;
 
 namespace ULDKClient.Utils
 {
-    class Helpers
+    public class Helpers
     {
 
 
@@ -171,6 +165,8 @@ namespace ULDKClient.Utils
 
                     graphicsLayer.AddElement(polyGraphic);
                     graphicsLayer.AddElement(pointGraphic);
+
+                    graphicsLayer.ClearSelection();
 
                     result = true;
 

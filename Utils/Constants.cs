@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace ULDKClient.Utils
 {
-    class Constants
+   public class Constants
     {
 
         public static string FC_RESULTS_NAME = @"ULDK";
@@ -17,7 +17,8 @@ namespace ULDKClient.Utils
         public static string REGION_DATA_URL = @"https://raw.githubusercontent.com/nita14/ULDK/master/Config/Data/regions.json";
         public static string FIND_COMMUNE_BY_ID_ULDK_URL = @"https://uldk.gugik.gov.pl/?request=GetCommuneById&result=geom_extent&id=";
         public static string FIND_REGION_BY_ID_ULDK_URL = @"https://uldk.gugik.gov.pl/?request=GetRegionById&result=geom_extent&id=";
-        public static string FIND_PARCEL_BY_ID_ULDK_URL = @"https://uldk.gugik.gov.pl/?request=GetParcelByIdOrNr&result=geom_wkt,voivodeship,county,commune,region&id=";
+        public static string FIND_PARCEL_BY_ID_ULDK_URL = @"https://uldk.gugik.gov.pl/?request=GetParcelById&result=geom_wkt,voivodeship,county,commune,region&id=";
+        public static string FIND_PARCEL_BY_MAP_POINT_ULDK_URL = @"https://uldk.gugik.gov.pl/?request=GetParcelByXY&result=geom_wkt,voivodeship,county,commune,region,id,teryt&xy=";
 
 
 

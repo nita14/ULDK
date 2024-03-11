@@ -1,6 +1,0 @@
-﻿<?xml version="1.0" encoding="utf-8" standalone="no"?>
-<Project ToolsVersion="14.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
-  <ImportGroup Condition=" '$(ExcludeRestorePackageImports)' != 'true' ">
-    <Import Project="$(NuGetPackageRoot)cefsharp.common\121.3.130\buildTransitive\CefSharp.Common.targets" Condition="Exists('$(NuGetPackageRoot)cefsharp.common\121.3.130\buildTransitive\CefSharp.Common.targets')" />
-  </ImportGroup>
-</Project>

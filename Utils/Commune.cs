@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ULDKClient.Utils
+﻿namespace ULDKClient.Utils
 {
 
     /// <summary>
     /// Commune class for Polish TERC data (level - gmina)
     /// </summary>
-    class Commune
+    public class Commune
     {
         private string _id;
         private string _name;

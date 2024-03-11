@@ -7,7 +7,7 @@
              xmlns:ui="clr-namespace:ULDKClient"
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
-             d:DesignHeight="300" d:DesignWidth="300"
+             d:DesignHeight="400" d:DesignWidth="300"
              d:DataContext="{Binding Path=ui.ULDKDockpaneViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -27,14 +27,88 @@
     </UserControl.Resources>
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
+            <RowDefinition Height="Auto" MinHeight="100"/>
+            <RowDefinition/>
         </Grid.RowDefinitions>
+        <Grid Grid.Column="0" Grid.Row="0" Margin="10,10,10,10">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Grid Grid.Column="0" Grid.Row="0" Margin="0,10,10,10">
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="5,5,5,5"
+								 Style="{DynamicResource Esri_TextBlockDockPaneHeader}" FontSize="15" FontWeight="DemiBold" 
+								 Text="ULDK - Parcel locator service" />
+            </Grid>
+            <Grid Grid.Column="0" Grid.Row="1" Margin="0,10,0,0">
+                <Expander Name="ExpanderDrawMap" Header="Find a parcel by drawing a shape:"   
+                        ExpandDirection="Down" IsExpanded="True" Width="Auto" Height="Auto" VerticalAlignment="Top">
 
-        <Grid Grid.Column="0" Grid.Row="0" Margin="10, 40">
+                    <Expander.Content>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <Grid Grid.Column="0" Grid.Row="0" Margin="5,25,5,5">
+                                <Button HorizontalAlignment="Center" Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPoint}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" Margin="2" Grid.Column="0" />
+                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="Point    " />
+                                        </StackPanel>
+                                    </Grid>
+                                </Button>
+                            </Grid>
+                            <Grid Grid.Column="1" Grid.Row="0" Margin="5,25,5,5">
+                                <Button HorizontalAlignment="Center" Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolyline}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" Margin="2" Grid.Column="0" />
+                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="Polyline" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Button>
+                            </Grid>
 
-            <Expander Name="ExpanderTerytSelection" Header="Find parcel by its number"   
-                ExpandDirection="Down" IsExpanded="False" Width="Auto" Height="Auto" VerticalAlignment="Top">
+                            <Grid Grid.Column="2" Grid.Row="0" Margin="5,25,5,5">
+                                <Button HorizontalAlignment="Center" Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolygon}">
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition Width="Auto" />
+                                            <ColumnDefinition Width="Auto" />
+                                        </Grid.ColumnDefinitions>
+                                        <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" Margin="2" Grid.Column="0" />
+                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                            <TextBlock Text="Polygon" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Button>
+                            </Grid>
+
+                        </Grid>
+
+                    </Expander.Content>
+                </Expander>
+            </Grid>
+        </Grid>
+        <Grid Grid.Column="0" Grid.Row="1" Margin="10,10,10,10">
+
+            <Expander Name="ExpanderTerytSelection" Header="Find a parcel by its number:"   
+                ExpandDirection="Down" IsExpanded="False" Width="Auto" MinHeight="200" VerticalAlignment="Top">
 
 
                 <Expander.Content>
@@ -134,7 +208,7 @@
                                 <TextBlock FontStyle="Italic" HorizontalAlignment="Left" Text="{Binding ParcelIdFull}" Height="14"/>
 
                             </Grid>
-                            
+
                         </Grid>
                         <Separator Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
                         <Grid Grid.Column="0" Grid.Row="4" Margin="5,5,5,5">
@@ -148,14 +222,14 @@
                             </Grid.RowDefinitions>
 
                             <Grid Grid.Column="0" Grid.Row="1">
-                                <Button HorizontalAlignment="Left" Style="{DynamicResource Esri_Button}">
+                                <Button  HorizontalAlignment="Left" Style="{DynamicResource Esri_Button}" Command="{Binding CmdShowParcelInGeoportal}" IsEnabled="{Binding ShowGeoportalBtnEnabled}">
                                     <Grid>
                                         <Grid.ColumnDefinitions>
                                             <ColumnDefinition Width="Auto" />
                                             <ColumnDefinition Width="Auto" />
                                         </Grid.ColumnDefinitions>
                                         <Image Width="20" Source="pack://application:,,,/ULDKClient;component/Images/geoportal.png" Margin="2" Grid.Column="0" />
-                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="{Binding ShowGeoportalBtnEnabled}">
                                             <TextBlock Text="Show in Geoportal" />
                                         </StackPanel>
                                     </Grid>

@@ -7,7 +7,7 @@ namespace ULDKClient.Utils
     /// <summary>
     /// Parcel class for getting results from ULDK
     /// </summary>
-    class Parcel
+   public class Parcel
     {
         private string _id;
         private string _idLong;

@@ -1,36 +1,21 @@
-﻿using ActiproSoftware.Products.Ribbon;
-using ArcGIS.Core.CIM;
+﻿using ArcGIS.Core.CIM;
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Data.Exceptions;
 using ArcGIS.Core.Geometry;
-using ArcGIS.Desktop.Catalog;
 using ArcGIS.Desktop.Core;
-using ArcGIS.Desktop.Core.Events;
-using ArcGIS.Desktop.Editing;
-using ArcGIS.Desktop.Extensions;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Internal.Mapping;
-using ArcGIS.Desktop.Internal.Mapping.Georeference;
-using ArcGIS.Desktop.Layouts;
+using ArcGIS.Desktop.Internal.Editing;
 using ArcGIS.Desktop.Mapping;
-using Microsoft.VisualBasic;
-using Newtonsoft.Json.Linq;
 using Serilog;
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.IO;
 using System.Linq;
-using System.Security.Policy;
-using System.Text;
 using System.Threading.Tasks;
-using System.Windows;
-using System.Windows.Controls;
 using System.Windows.Data;
 using System.Windows.Input;
 using ULDKClient.Utils;
@@ -38,7 +23,7 @@ using MessageBox = ArcGIS.Desktop.Framework.Dialogs.MessageBox;
 
 namespace ULDKClient
 {
-    internal class ULDKDockpaneViewModel : DockPane
+    public class ULDKDockpaneViewModel : DockPane
     {
         private const string _dockPaneID = "ULDKClient_ULDKDockpane";
         private bool _isInitialized = false;
@@ -46,13 +31,14 @@ namespace ULDKClient
         public static GraphicsLayer _graphicsLayer = null;
         public static Map _currentMap = null;
         public static string projectParentFolder = null;
+       
 
 
 
 
 
-
-        protected ULDKDockpaneViewModel() {
+        protected ULDKDockpaneViewModel()
+        {
 
 
 
@@ -83,12 +69,12 @@ namespace ULDKClient
 
                     await CheckOrCreateLocalGDB(projectParentFolder);
 
-                   
+
                     await QueuedTask.Run(async () =>
                     {
-                       _spatialReference2180 = new SpatialReferenceBuilder(2180).ToSpatialReference();
-                       _currentMap = MapView.Active.Map;
-                       _graphicsLayer = Helpers.GetGraphicsLayer(_currentMap);
+                        _spatialReference2180 = new SpatialReferenceBuilder(2180).ToSpatialReference();
+                        _currentMap = MapView.Active.Map;
+                        _graphicsLayer = Helpers.GetGraphicsLayer(_currentMap);
                     });
 
 
@@ -111,12 +97,7 @@ namespace ULDKClient
         {
 
 
-           
 
-
-
-                
-            
         }
 
 
@@ -153,7 +134,7 @@ namespace ULDKClient
             pane.Activate();
 
 
-           
+
 
 
         }
@@ -191,8 +172,8 @@ namespace ULDKClient
         /// </summary>
         /// <param name="projectParentFolder"></param>
         /// <returns></returns>
-        private async static Task CheckOrCreateLocalGDB(string projectParentFolder) 
-        
+        private async static Task CheckOrCreateLocalGDB(string projectParentFolder)
+
         {
 
             string gdbPath = Path.Combine(projectParentFolder, "GUGIK", "GUGIK.gdb");
@@ -205,10 +186,11 @@ namespace ULDKClient
                 {
                     new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
                 });
-                
+
 
             }
-            else {
+            else
+            {
 
                 Log.Information("File GDB does not exists. Creating...");
 
@@ -235,7 +217,8 @@ namespace ULDKClient
                     Log.Fatal("A geodatabase-related exception has occurred.");
                     Log.Fatal(gex.Message.ToLower());
                 }
-                catch (Exception aex){
+                catch (Exception aex)
+                {
                     Log.Fatal("Another fatal error occurred.");
                     Log.Fatal(aex.GetType().FullName);
                     Log.Fatal(aex.Message.ToLower());
@@ -253,7 +236,8 @@ namespace ULDKClient
             {
                 Log.Information("The results feature class already exists.");
             }
-            else {
+            else
+            {
                 Log.Information("The results feature class needs to be created.");
                 bool fcCreated = await Utils.Helpers.CreateResultsFeatureClassAsync(gdbPath, Utils.Constants.FC_RESULTS_NAME);
 
@@ -261,7 +245,8 @@ namespace ULDKClient
                 {
                     Log.Information("The results feature class has been created.");
                 }
-                else {
+                else
+                {
                     Log.Fatal("The results feature class has NOT been created.");
 
                 }
@@ -270,34 +255,47 @@ namespace ULDKClient
             Log.Information("Initilizing UI...");
         }
 
-     
-        
+
+
         private string _parcelIdFull = "";
         public string ParcelIdFull
         {
             get => _parcelIdFull;
             set => SetProperty(ref _parcelIdFull, value);
-        }        
-        
+        }
+
         private string _parcelId = "";
         public string ParcelId
         {
             get => _parcelId;
-            set 
-                
-                { 
-                
+            set
+
+            {
+
                 SetProperty(ref _parcelId, value);
+                ShowGeoportalBtnEnabled = false;
 
-                if (value != null && value.Length > 0 && ParcelIdFull.Split(".").Length == 2) {
+                if (value != null && value.Length > 0 && ParcelIdFull.Split(".").Length == 2)
+                {
                     ParcelIdFull += "." + value;
-                } else if (value != null && value.Length > 0 && ParcelIdFull.Split(".").Length > 2) {
+                }
+                else if (value != null && value.Length > 0 && ParcelIdFull.Split(".").Length > 2)
+                {
                     ParcelIdFull = ParcelIdFull.Split(".")[0] + "." + ParcelIdFull.Split(".")[1] + "." + value;
+                    
                 }
-                
 
-                }
+
+            }
         }
+        /// <summary>
+        /// Sketch reference
+        /// </summary>
+        /// 
+
+
+
+
         //Region dropdwon handlers
 
         private ObservableCollection<Region> _regions = new ObservableCollection<Region>();
@@ -310,7 +308,7 @@ namespace ULDKClient
 
         }
 
-        
+
         private Region _selectedRegion;
         public Region SelectedRegion
         {
@@ -319,18 +317,36 @@ namespace ULDKClient
             {
 
                 SetProperty(ref _selectedRegion, value, () => SelectedRegion);
-
+                ShowGeoportalBtnEnabled = false;
                 if (value != null)
                 {
-                    ParcelIdFull += "." + value.Number;
+
                     ParcelId = "";
+
+                    if (value != null && ParcelIdFull.Split(".").Length >= 2)
+                    {
+                        ParcelIdFull = ParcelIdFull.Split(".")[0] + "." + value.Number;
+                    } else if (value != null && ParcelIdFull.Length > 0) {
+                        ParcelIdFull += "." + value.Number;
+                    }
+
                     ZoomToTercExtent(value.CommuneId + "." + value.Number, "Region");
+
 
                 }
             }
         }
 
+        //isEbaled
 
+        private bool _showGeoportalBtnEnabled = false;
+        public bool ShowGeoportalBtnEnabled {
+            
+            get => _showGeoportalBtnEnabled;
+            set => SetProperty(ref _showGeoportalBtnEnabled, value, () => ShowGeoportalBtnEnabled);
+
+
+        }
 
 
         //Commune dropdwon handlers
@@ -352,7 +368,9 @@ namespace ULDKClient
             {
 
                 SetProperty(ref _selectedCommune, value, () => SelectedCommune);
-                if (value != null) {
+                ShowGeoportalBtnEnabled = false;
+                if (value != null)
+                {
 
                     ParcelIdFull = value.Id;
                     ParcelId = "";
@@ -362,15 +380,16 @@ namespace ULDKClient
                     CollectionView regionsOriginalView = (CollectionView)CollectionViewSource.GetDefaultView(Regions);
                     regionsOriginalView.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(Region.Number), ListSortDirection.Ascending));
 
-                    regionsOriginalView.Filter = r => {
+                    regionsOriginalView.Filter = r =>
+                    {
 
                         Region vRegion = r as Region;
                         return (vRegion != null && vRegion.CommuneId == value.Id);
 
-                        };
+                    };
                     int cnt = regionsOriginalView.Count;
-                    
-               
+
+
                 }
             }
         }
@@ -385,7 +404,7 @@ namespace ULDKClient
                 Polygon poly = await GetRemoteData.GetTercExtentByIDAsync(id, TercType, _spatialReference2180);
                 //Get the active map view.
                 var mapView = MapView.Active;
-                if (mapView == null || poly ==null)
+                if (mapView == null || poly == null)
                     return;
 
                 await mapView.ZoomToAsync(poly, TimeSpan.FromSeconds(1));
@@ -408,12 +427,19 @@ namespace ULDKClient
                         Parcel parcel = await GetRemoteData.GetParcelByIdAsync(ParcelIdFull, _spatialReference2180);
 
                         //parcel with the specified id does not exist
-                        if (parcel == null) {
+                        if (parcel == null)
+                        {
                             ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.PARCEL_ID_NOT_EXIST_ERROR);
                             Log.Information("Cannot find parcel with the id: " + ParcelIdFull);
+                            return;
                         }
 
                         Log.Information("Found a parcel with the id: " + ParcelIdFull);
+
+                        //Enable show in geoportal button
+                        ShowGeoportalBtnEnabled = true;
+                        
+
                         var mapView = MapView.Active;
                         mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
 
@@ -424,12 +450,13 @@ namespace ULDKClient
                             Log.Information("Parcel added to graphics layer.");
 
                         }
-                        else {
+                        else
+                        {
 
                             Log.Information("Cannot add a parcel to graphics layer.");
                         }
 
-                        
+
 
                         bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, projectParentFolder);
                         if (isFeatureAdded)
@@ -443,25 +470,107 @@ namespace ULDKClient
                             Log.Information("Cannot add a parcel to feature class.");
                         }
 
-     
+
 
 
                     }
                     else
                     {
                         ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_REGION_ERROR);
+                        
 
                     }
                 });
             }
         }
 
-    }
 
-    /// <summary>
-    /// Button implementation to show the DockPane.
-    /// </summary>
-    internal class ULDKDockpane_ShowButton : ArcGIS.Desktop.Framework.Contracts.Button
+
+        public ICommand CmdShowParcelInGeoportal
+        {
+            get
+            {
+                return new RelayCommand(async () =>
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "https://mapy.geoportal.gov.pl/imap/?identifyParcel=" + ParcelIdFull,
+                        UseShellExecute = true
+                    });
+                    
+
+                 
+                });
+            }
+        }
+
+        public ICommand CmdStartSketchPoint
+        {
+            get
+            {
+                return new RelayCommand(async () =>
+                {
+                    await ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPoint");
+
+
+
+
+                });
+            }
+        }
+
+        public ICommand CmdStartSketchPolyline
+        {
+            get
+            {
+                return new RelayCommand(async () =>
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "https://mapy.geoportal.gov.pl/imap/?identifyParcel=" + ParcelIdFull,
+                        UseShellExecute = true
+                    });
+
+
+
+                });
+            }
+        }
+
+        public ICommand CmdStartSketchPolygon
+        {
+            get
+            {
+                return new RelayCommand(async () =>
+                {
+                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
+                    {
+                        FileName = "https://mapy.geoportal.gov.pl/imap/?identifyParcel=" + ParcelIdFull,
+                        UseShellExecute = true
+                    });
+
+
+
+                });
+            }
+        }
+
+        public void Test() { 
+        
+        
+        }
+
+
+
+    }
+ 
+
+
+
+/// <summary>
+/// Button implementation to show the DockPane.
+/// </summary>
+internal class ULDKDockpane_ShowButton : ArcGIS.Desktop.Framework.Contracts.Button
     {
         protected override void OnClick()
         {

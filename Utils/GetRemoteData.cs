@@ -2,22 +2,17 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Net.Http;
-using System.Net.Http.Headers;
-using System.Reflection.Metadata;
-using System.Text;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Serilog;
 using System.Collections.ObjectModel;
 using ArcGIS.Core.Geometry;
 using System.Globalization;
-using System.Web;
 using System.Text.RegularExpressions;
 
 namespace ULDKClient.Utils
 {
-    class GetRemoteData
+    public class GetRemoteData
     {
 
  
@@ -136,7 +131,7 @@ namespace ULDKClient.Utils
             var response = await responseMessage.Content.ReadAsStringAsync();
             var status = response.Split("\n")[0];
 
-            if (status.Substring(0,1) == "-1")
+            if (status.Length >= 2 && status.Substring(0,2) == "-1")
             {
                 Log.Fatal("GetParcelByIdAsync error. Cannot find the parcel with the id provided.");
                 return null;
@@ -166,5 +161,55 @@ namespace ULDKClient.Utils
             Parcel parcel = new Parcel(parcelIdFull.Split(".")[2], parcelIdFull, attrs[1], attrs[2], attrs[3], attrs[4], DateTime.Now, poly);
             return parcel;
          }
+
+        public static async Task<Parcel> GetParcelByPointAsync(MapPoint point)
+        {
+            //Get data from the endpoint 
+
+            Log.Information("Preparing GetParcelByPointAsync request...");
+            EsriHttpClient esriHttpClient = new EsriHttpClient();
+            esriHttpClient.Timeout = TimeSpan.FromSeconds(10);
+
+            string requestCoords = point.Coordinate2D.X.ToString() + "," + point.Coordinate2D.Y.ToString() + "," + point.SpatialReference.LatestWkid.ToString();
+
+            Log.Information("Request URL is: " + Constants.FIND_PARCEL_BY_MAP_POINT_ULDK_URL + requestCoords);
+            EsriHttpResponseMessage responseMessage = esriHttpClient.Get(Constants.FIND_PARCEL_BY_MAP_POINT_ULDK_URL + requestCoords);
+
+            responseMessage.EnsureSuccessStatusCode();
+
+            var response = await responseMessage.Content.ReadAsStringAsync();
+            var status = response.Split("\n")[0];
+
+            if (status.Length >= 2 && status.Substring(0, 2) == "-1")
+            {
+                Log.Fatal("GetParcelByPointAsync error. Cannot find the parcel with the id provided.");
+                return null;
+
+            }
+
+            string geomCoords = response.Split("\n")[1].Split(";")[1];
+            Regex regex = new Regex(@"[0-9]+\.[0-9]+ [0-9]+\.[0-9]+");
+            List<Match> matches = regex.Matches(geomCoords).ToList();
+
+            List<MapPoint> mapPoints = new List<MapPoint>();
+
+            foreach (Match match in matches)
+            {
+                string[] coords = match.Value.Split(" ");
+                MapPoint pt = MapPointBuilderEx.CreateMapPoint(Convert.ToDouble(coords[0], CultureInfo.InvariantCulture), Convert.ToDouble(coords[1], CultureInfo.InvariantCulture));
+                mapPoints.Add(pt);
+            }
+
+            PolygonBuilderEx polygonBuilder = new PolygonBuilderEx(mapPoints, AttributeFlags.None, SpatialReferenceBuilder.CreateSpatialReference(2180));
+            Polygon poly = polygonBuilder.ToGeometry() as Polygon;
+
+            //get attributes
+            Regex regexattr = new Regex(@"\|.{0,}");
+            List<Match> matchesattr = regexattr.Matches(geomCoords).ToList();
+            string[] attrs = matchesattr[0].Value.Split("|");
+
+            Parcel parcel = new Parcel(attrs[5], attrs[6], attrs[1], attrs[2], attrs[3], attrs[4], DateTime.Now, poly);
+            return parcel;
+        }
     }
 }

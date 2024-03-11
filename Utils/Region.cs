@@ -1,16 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-
-namespace ULDKClient.Utils
+﻿namespace ULDKClient.Utils
 {
 
     /// <summary>
     /// Region class for Polish TERC data (level - obreby)
     /// </summary>
-    class Region
+    public class Region
     {
         private long _objectid;
         private string _communeId;
