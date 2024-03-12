@@ -70,11 +70,29 @@ namespace ULDKClient {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Cannot save the parcel in the feature class or add it to the graphics layer..
+        /// </summary>
+        internal static string PARCEL_CANNOT_SAVE_GL_FC_ERROR {
+            get {
+                return ResourceManager.GetString("PARCEL_CANNOT_SAVE_GL_FC_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Cannot find the parcel with the provided id. Please check if it is correct..
         /// </summary>
         internal static string PARCEL_ID_NOT_EXIST_ERROR {
             get {
                 return ResourceManager.GetString("PARCEL_ID_NOT_EXIST_ERROR", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please draw a line whose length is less than 500 meters. Trying to be graceful to ULDK servers ;-).
+        /// </summary>
+        internal static string SKETCH_LINE_LENGTH_OVER_LIMIT {
+            get {
+                return ResourceManager.GetString("SKETCH_LINE_LENGTH_OVER_LIMIT", resourceCulture);
             }
         }
     }

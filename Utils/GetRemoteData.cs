@@ -24,19 +24,24 @@ namespace ULDKClient.Utils
         {
 
             ObservableCollection<Commune> communes;
-
+            try { 
             //Get data from the endpoint 
-            Log.Information("Preparing Commune request...");
-            EsriHttpClient esriHttpClient = new EsriHttpClient();
-            esriHttpClient.Timeout = TimeSpan.FromSeconds(10);
+                Log.Information("Preparing Commune request...");
+                EsriHttpClient esriHttpClient = new EsriHttpClient();
+                esriHttpClient.Timeout = TimeSpan.FromSeconds(10);
       
-            EsriHttpResponseMessage responseMessage = esriHttpClient.Get(Constants.COMMUNE_DATA_URL);
-            responseMessage.EnsureSuccessStatusCode();
+                EsriHttpResponseMessage responseMessage = esriHttpClient.Get(Constants.COMMUNE_DATA_URL);
+                responseMessage.EnsureSuccessStatusCode();
 
-            var resp = await responseMessage.Content.ReadAsStringAsync();
-            communes = JsonConvert.DeserializeObject<ObservableCollection<Commune>>(resp);
-            return communes;
-    
+                var resp = await responseMessage.Content.ReadAsStringAsync();
+                communes = JsonConvert.DeserializeObject<ObservableCollection<Commune>>(resp);
+                return communes;
+            } catch (Exception ex)
+            {
+                string m =  ex.Message;
+                Log.Error(m);
+                return null;
+            }
         }
 
         /// <summary>
@@ -69,7 +74,7 @@ namespace ULDKClient.Utils
         /// <param name="tercId"></param>
         /// <param name="tercType"></param>
         /// <returns></returns>
-        public async static Task<Polygon> GetTercExtentByIDAsync(string tercId, string tercType, SpatialReference spatialReference2180)
+        public async static Task<Polygon> GetTercExtentByIDAsync(string tercId, string tercType)
         {
 
             //Get data from the endpoint 
@@ -108,13 +113,13 @@ namespace ULDKClient.Utils
             // Create an envelope
             Envelope env = EnvelopeBuilderEx.CreateEnvelope(minPt, maxPt);
             PolygonBuilderEx polygonBuilderEx = new PolygonBuilderEx(env);
-            polygonBuilderEx.SpatialReference = spatialReference2180;
+            polygonBuilderEx.SpatialReference = ULDKDockpaneViewModel._sp2180;
             Polygon polygonFromEnv = polygonBuilderEx.ToGeometry() as Polygon;
             return polygonFromEnv;
 
         }
 
-        public static async Task<Parcel> GetParcelByIdAsync(string parcelIdFull, SpatialReference spatialReference2180)
+        public static async Task<Parcel> GetParcelByIdAsync(string parcelIdFull)
         {
             //Get data from the endpoint 
 
@@ -138,19 +143,44 @@ namespace ULDKClient.Utils
 
             }
 
+            Parcel parcel = await GetParcelFromHTTPRequestAsync(response);
+            return parcel;
+         }
+
+        private static async Task<Parcel> GetParcelFromHTTPRequestAsync(string response)
+        {
+            Parcel parcel = null;
+
             string geomCoords = response.Split("\n")[1].Split(";")[1];
-            Regex regex = new Regex(@"[0-9]+\.[0-9]+ [0-9]+\.[0-9]+");
-            List<Match> matches = regex.Matches(geomCoords).ToList();
+            Regex regex = new Regex(@"\(([0-9]+\.[0-9]+ [0-9]+\.[0-9]+\,?)+\)");
+            List<Match> rings = regex.Matches(geomCoords).ToList();
 
-            List<MapPoint> mapPoints = new List<MapPoint>();
+            PolygonBuilderEx polygonBuilder = new PolygonBuilderEx(ULDKDockpaneViewModel._sp2180);
 
-            foreach (Match match in matches) {
-                string[] coords = match.Value.Split(" ");
-                MapPoint pt = MapPointBuilderEx.CreateMapPoint(Convert.ToDouble(coords[0], CultureInfo.InvariantCulture), Convert.ToDouble(coords[1], CultureInfo.InvariantCulture));
-                mapPoints.Add(pt);
+
+
+            foreach (Match ring in rings)
+            {
+                //remove parenthesis
+                string ringVal = ring.Value;
+                string ringValidated = ringVal.Substring(1, ringVal.Length - 2);
+                string[] coordPairs = ringValidated.Split(",");
+
+                List<MapPoint> mapPoints = new List<MapPoint>();
+
+                foreach (string coordPair in coordPairs)
+                {
+                    string[] coords = coordPair.Split(" ");
+
+                    MapPoint pt = MapPointBuilderEx.CreateMapPoint(Convert.ToDouble(coords[0], CultureInfo.InvariantCulture), Convert.ToDouble(coords[1], CultureInfo.InvariantCulture));
+                    mapPoints.Add(pt);
+                }
+
+                polygonBuilder.AddPart(mapPoints);
+
             }
 
-            PolygonBuilderEx polygonBuilder = new PolygonBuilderEx(mapPoints,AttributeFlags.None, spatialReference2180);
+
             Polygon poly = polygonBuilder.ToGeometry() as Polygon;
 
             //get attributes
@@ -158,9 +188,9 @@ namespace ULDKClient.Utils
             List<Match> matchesattr = regexattr.Matches(geomCoords).ToList();
             string[] attrs = matchesattr[0].Value.Split("|");
 
-            Parcel parcel = new Parcel(parcelIdFull.Split(".")[2], parcelIdFull, attrs[1], attrs[2], attrs[3], attrs[4], DateTime.Now, poly);
+            parcel = new Parcel(attrs[5].Split(".")[2], attrs[6], attrs[1], attrs[2], attrs[3], attrs[4], DateTime.Now, poly);
             return parcel;
-         }
+        }
 
         public static async Task<Parcel> GetParcelByPointAsync(MapPoint point)
         {
@@ -182,34 +212,13 @@ namespace ULDKClient.Utils
 
             if (status.Length >= 2 && status.Substring(0, 2) == "-1")
             {
-                Log.Fatal("GetParcelByPointAsync error. Cannot find the parcel with the id provided.");
+                Log.Fatal("GetParcelByPointAsync error. Cannot find the parcel with the xy provided.");
                 return null;
 
             }
-
-            string geomCoords = response.Split("\n")[1].Split(";")[1];
-            Regex regex = new Regex(@"[0-9]+\.[0-9]+ [0-9]+\.[0-9]+");
-            List<Match> matches = regex.Matches(geomCoords).ToList();
-
-            List<MapPoint> mapPoints = new List<MapPoint>();
-
-            foreach (Match match in matches)
-            {
-                string[] coords = match.Value.Split(" ");
-                MapPoint pt = MapPointBuilderEx.CreateMapPoint(Convert.ToDouble(coords[0], CultureInfo.InvariantCulture), Convert.ToDouble(coords[1], CultureInfo.InvariantCulture));
-                mapPoints.Add(pt);
-            }
-
-            PolygonBuilderEx polygonBuilder = new PolygonBuilderEx(mapPoints, AttributeFlags.None, SpatialReferenceBuilder.CreateSpatialReference(2180));
-            Polygon poly = polygonBuilder.ToGeometry() as Polygon;
-
-            //get attributes
-            Regex regexattr = new Regex(@"\|.{0,}");
-            List<Match> matchesattr = regexattr.Matches(geomCoords).ToList();
-            string[] attrs = matchesattr[0].Value.Split("|");
-
-            Parcel parcel = new Parcel(attrs[5], attrs[6], attrs[1], attrs[2], attrs[3], attrs[4], DateTime.Now, poly);
+            Parcel parcel = await GetParcelFromHTTPRequestAsync(response);
             return parcel;
+
         }
     }
 }

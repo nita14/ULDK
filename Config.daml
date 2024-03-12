@@ -25,10 +25,12 @@
         <group id="ULDKClient_Group1" caption="Parcel locator service (ULDK)" appearsOnAddInTab="false">
           <!-- host controls within groups -->
           <button refID="ULDKClient_ULDKDockpane_ShowButton" size="large" />
+          
         </group>
         <group id="ULDKClient_GroupSketch" caption="Get parcel(s) from a sketch" appearsOnAddInTab="false">
           <!-- host controls within groups -->
           <tool refID="ULDKClient_SketchPoint" size="large" />
+          <tool refID="ULDKClient_SketchPolyline" size="large" />
         </group>
       </groups>
       <controls>
@@ -38,8 +40,10 @@
         </button>
         <tool id="ULDKClient_SketchPoint" caption="Draw a Point" className="SketchPoint" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" condition="esri_mapping_mapPane">
           <tooltip heading="Draw a Point">
-            Click to draw a point on the map<disabledText />
-          </tooltip>
+            Click to draw a point on the map<disabledText /></tooltip>
+        </tool>
+        <tool id="ULDKClient_SketchPolyline" caption="Draw a polyline" className="SketchPolyline" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" condition="esri_mapping_mapPane">
+          <tooltip heading="Draw a polyline">Click to draw a polyline on the map<disabledText /></tooltip>
         </tool>
       </controls>
       <dockPanes>

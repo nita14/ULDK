@@ -27,10 +27,11 @@ namespace ULDKClient
     {
         private const string _dockPaneID = "ULDKClient_ULDKDockpane";
         private bool _isInitialized = false;
-        public static SpatialReference _spatialReference2180 = null;
         public static GraphicsLayer _graphicsLayer = null;
         public static Map _currentMap = null;
-        public static string projectParentFolder = null;
+        public static string _projectParentFolder = null;
+        public static MapView _mapView = null;
+        public static SpatialReference _sp2180 = null;
        
 
 
@@ -50,10 +51,10 @@ namespace ULDKClient
             if (!_isInitialized)
             {
 
-                projectParentFolder = System.IO.Directory.GetParent(Project.Current.URI).FullName + @"\";
+                _projectParentFolder = System.IO.Directory.GetParent(Project.Current.URI).FullName + @"\";
+                
 
-
-                PrepareAndConfigureLogger(projectParentFolder);
+                PrepareAndConfigureLogger(_projectParentFolder);
 
                 _isInitialized = true;
 
@@ -61,20 +62,22 @@ namespace ULDKClient
                 Log.Information("Getting dictionary data from a remote URL...");
                 try
                 {
+
                     _communes = await GetRemoteData.GetCommuneDataAsync();
                     Log.Information("Communes downloaded: {0}.", _communes.Count());
 
                     _regions = await GetRemoteData.GetRegionDataAsync();
                     Log.Information("Regions downloaded: {0}.", _regions.Count());
 
-                    await CheckOrCreateLocalGDB(projectParentFolder);
+                    await CheckOrCreateLocalGDB(_projectParentFolder);
 
 
                     await QueuedTask.Run(async () =>
                     {
-                        _spatialReference2180 = new SpatialReferenceBuilder(2180).ToSpatialReference();
                         _currentMap = MapView.Active.Map;
                         _graphicsLayer = Helpers.GetGraphicsLayer(_currentMap);
+                        _mapView = MapView.Active;
+                        _sp2180 = new SpatialReferenceBuilder(Constants.SPATIAL_REF_2180_WKID).ToSpatialReference();
                     });
 
 
@@ -401,7 +404,7 @@ namespace ULDKClient
             await QueuedTask.Run(async () =>
             {
 
-                Polygon poly = await GetRemoteData.GetTercExtentByIDAsync(id, TercType, _spatialReference2180);
+                Polygon poly = await GetRemoteData.GetTercExtentByIDAsync(id, TercType);
                 //Get the active map view.
                 var mapView = MapView.Active;
                 if (mapView == null || poly == null)
@@ -424,7 +427,7 @@ namespace ULDKClient
                     if (ParcelIdFull != null && ParcelIdFull != "" && ParcelIdFull.Split(".").Length == 3)
                     {
                         //execute command
-                        Parcel parcel = await GetRemoteData.GetParcelByIdAsync(ParcelIdFull, _spatialReference2180);
+                        Parcel parcel = await GetRemoteData.GetParcelByIdAsync(ParcelIdFull);
 
                         //parcel with the specified id does not exist
                         if (parcel == null)
@@ -439,39 +442,11 @@ namespace ULDKClient
                         //Enable show in geoportal button
                         ShowGeoportalBtnEnabled = true;
                         
+                        _mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
 
-                        var mapView = MapView.Active;
-                        mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
+                        //add parcel to graphics layer and feature class
 
-                        //process the geometry
-                        bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(_graphicsLayer, parcel.Geom, parcel.Id);
-                        if (isGraphicadded)
-                        {
-                            Log.Information("Parcel added to graphics layer.");
-
-                        }
-                        else
-                        {
-
-                            Log.Information("Cannot add a parcel to graphics layer.");
-                        }
-
-
-
-                        bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, projectParentFolder);
-                        if (isFeatureAdded)
-                        {
-                            Log.Information("Parcel added to feature class.");
-
-                        }
-                        else
-                        {
-
-                            Log.Information("Cannot add a parcel to feature class.");
-                        }
-
-
-
+                        AddParcelToGraphicsAndFeatureClass(parcel);
 
                     }
                     else
@@ -484,7 +459,54 @@ namespace ULDKClient
             }
         }
 
+        public static async Task<bool> AddParcelToGraphicsAndFeatureClass(Parcel parcel)
+        {
+       
+            try 
+            {
 
+                //process the geometry
+                bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(_graphicsLayer, parcel.Geom, parcel.Id);
+                if (isGraphicadded)
+                {
+                    Log.Information("Parcel added to graphics layer.");
+
+                }
+                else
+                {
+
+                    Log.Information("Cannot add a parcel to graphics layer.");
+                }
+
+
+                bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, _projectParentFolder);
+                if (isFeatureAdded)
+                {
+                    Log.Information("Parcel added to feature class.");
+
+                }
+                else
+                {
+
+                    Log.Information("Cannot add a parcel to feature class.");
+                }
+
+                if (isGraphicadded && isFeatureAdded)
+
+                { return true;
+                } else { return false; }
+
+            }
+            catch (Exception ex) {
+                Log.Fatal("AddParcelToGraphicsAndFeatureClass: something went wrong");
+                Log.Fatal(ex.Message.ToString());
+                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.PARCEL_CANNOT_SAVE_GL_FC_ERROR);
+                return false;
+            }
+
+
+
+        }
 
         public ICommand CmdShowParcelInGeoportal
         {
@@ -510,11 +532,7 @@ namespace ULDKClient
             {
                 return new RelayCommand(async () =>
                 {
-                    await ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPoint");
-
-
-
-
+                    ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPoint");
                 });
             }
         }
@@ -525,11 +543,7 @@ namespace ULDKClient
             {
                 return new RelayCommand(async () =>
                 {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = "https://mapy.geoportal.gov.pl/imap/?identifyParcel=" + ParcelIdFull,
-                        UseShellExecute = true
-                    });
+                    ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPolyline");
 
 
 
@@ -555,13 +569,36 @@ namespace ULDKClient
             }
         }
 
-        public void Test() { 
-        
-        
+        public static async void AddParcelToMapfromSketch(MapPoint point) {
+
+            Parcel parcel = await GetRemoteData.GetParcelByPointAsync(point);
+
+            await AddParcelToGraphicsAndFeatureClass(parcel);
+
+            _mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
+
         }
 
+        public static async void ProcessPolylineFromSketch(Polyline polyline)
+        {
+            // 1. Densify the line
 
-
+            Polyline polyDensified = GeometryEngine.Instance.DensifyByLength(polyline, 1) as Polyline;
+                
+            // 2. Get first vertex and fetch parcel and iterate
+            while (polyDensified.Points.Count > 0)
+            {
+                MapPoint mp = polyDensified.Points[0];
+                Parcel parcel = await GetRemoteData.GetParcelByPointAsync(mp);
+                // 3. Add pacel to map, gl and fc
+                await AddParcelToGraphicsAndFeatureClass(parcel);
+                // 4. Bufer the parcel geom by 30cm
+                Polygon parcelGeomBuffer = GeometryEngine.Instance.Buffer(parcel.Geom, 0.50) as Polygon; 
+                // 5. Perform difference densyfied line and parcel geom
+                Polyline polyDensifiedNew = GeometryEngine.Instance.Difference(polyDensified, parcelGeomBuffer) as Polyline;
+                polyDensified = polyDensifiedNew;
+            }
+        }
     }
  
 
