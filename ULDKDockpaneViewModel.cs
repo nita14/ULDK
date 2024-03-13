@@ -557,12 +557,7 @@ namespace ULDKClient
             {
                 return new RelayCommand(async () =>
                 {
-                    System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
-                    {
-                        FileName = "https://mapy.geoportal.gov.pl/imap/?identifyParcel=" + ParcelIdFull,
-                        UseShellExecute = true
-                    });
-
+                    ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPolygon");
 
 
                 });
@@ -582,7 +577,6 @@ namespace ULDKClient
         public static async void ProcessPolylineFromSketch(Polyline polyline)
         {
             // 1. Densify the line
-
             Polyline polyDensified = GeometryEngine.Instance.DensifyByLength(polyline, 1) as Polyline;
                 
             // 2. Get first vertex and fetch parcel and iterate
@@ -598,6 +592,28 @@ namespace ULDKClient
                 Polyline polyDensifiedNew = GeometryEngine.Instance.Difference(polyDensified, parcelGeomBuffer) as Polyline;
                 polyDensified = polyDensifiedNew;
             }
+        }
+
+        public static async void ProcessPolygonFromSketch(Polygon polygon)
+        {
+
+            //1. Geometry, get extent
+
+            Envelope polyExtent = polygon.Extent;
+            double polyExtentXMin = polyExtent.XMin;
+            double polyExtentYMin = polyExtent.YMin;
+            double polyExtentXMax = polyExtent.XMax;
+            double polyExtentYMax = polyExtent.YMax;
+
+            //2. Get all points in the extent (every 0.5 meter) as Multipoint
+            Multipoint fishnetMp = await Helpers.CreateFishnetMultiPointFromExtent(polyExtentXMin, polyExtentYMin, polyExtentXMax, polyExtentYMax);
+
+
+            //3. Intesection (GE) Geometry Sketch and All Points as Multipoint 
+
+            //4. Multipoint that is inside
+
+            throw new NotImplementedException();
         }
     }
  

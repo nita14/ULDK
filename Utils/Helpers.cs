@@ -253,5 +253,10 @@ namespace ULDKClient.Utils
 
             return result;
         }
+
+        public static async Task<Multipoint> CreateFishnetMultiPointFromExtent(double polyExtentXMin, double polyExtentYMin, double polyExtentXMax, double polyExtentYMax)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

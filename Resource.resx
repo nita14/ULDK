@@ -129,4 +129,7 @@
   <data name="SKETCH_LINE_LENGTH_OVER_LIMIT" xml:space="preserve">
     <value>Please draw a line whose length is less than 500 meters. Trying to be graceful to ULDK servers ;-)</value>
   </data>
+  <data name="SKETCH_POLYGON_AREA_OVER_LIMIT" xml:space="preserve">
+    <value>Please draw a plygon whose area is less than 10 000 square meters (100x100m). Trying to be graceful to ULDK servers ;-)</value>
+  </data>
 </root>

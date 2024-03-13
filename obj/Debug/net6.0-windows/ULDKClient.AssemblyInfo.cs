@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ULDKClient")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+ebdb307b74a8a56bd43db1a732502a61b4cf583f")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+0a94e9d79ea42050041a2f914608d3c0a0c84fde")]
 [assembly: System.Reflection.AssemblyProductAttribute("ULDKClient")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ULDKClient")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

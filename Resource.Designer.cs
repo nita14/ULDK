@@ -95,5 +95,14 @@ namespace ULDKClient {
                 return ResourceManager.GetString("SKETCH_LINE_LENGTH_OVER_LIMIT", resourceCulture);
             }
         }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Please draw a plygon whose area is less than 10 000 square meters (100x100m). Trying to be graceful to ULDK servers ;-).
+        /// </summary>
+        internal static string SKETCH_POLYGON_AREA_OVER_LIMIT {
+            get {
+                return ResourceManager.GetString("SKETCH_POLYGON_AREA_OVER_LIMIT", resourceCulture);
+            }
+        }
     }
 }
