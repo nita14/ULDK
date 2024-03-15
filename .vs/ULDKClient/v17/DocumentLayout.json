@@ -3,8 +3,24 @@
   "WorkspaceRootPath": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\sketchpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:sketchpoint.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\sketchpolyline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:sketchpolyline.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\sketchpolygon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:sketchpolygon.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\utils\\getremotedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:utils\\getremotedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|C:\\Dev\\GIS\\AddIns312\\ULDKClient\\resource.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
+      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:resource.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\utils\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -13,26 +29,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\uldkdockpaneviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:uldkdockpaneviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\uldkdockpane.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:uldkdockpane.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\utils\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:utils\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|C:\\Dev\\GIS\\AddIns312\\ULDKClient\\resource.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:resource.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\utils\\getremotedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:utils\\getremotedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\uldkclient.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:uldkclient.csproj||{FA3CD31E-987B-443A-9B81-186104E8DAC1}|"
     }
   ],
   "DocumentGroupContainers": [
@@ -42,21 +38,8 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 2,
+          "SelectedChildIndex": 1,
           "Children": [
-            {
-              "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "Helpers.cs",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Helpers.cs",
-              "RelativeDocumentMoniker": "Utils\\Helpers.cs",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Helpers.cs",
-              "RelativeToolTip": "Utils\\Helpers.cs",
-              "ViewState": "AQIAAO8AAAAAAAAAAIAwwAABAAAOAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-13T20:50:01.919Z",
-              "EditorCaption": ""
-            },
             {
               "$type": "Bookmark",
               "Name": "ST:129:0:{116d2292-e37d-41cd-a077-ebacac4c8cc4}"
@@ -64,90 +47,86 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
-              "Title": "SketchPolygon.cs",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\SketchPolygon.cs",
-              "RelativeDocumentMoniker": "SketchPolygon.cs",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\SketchPolygon.cs",
-              "RelativeToolTip": "SketchPolygon.cs",
-              "ViewState": "AQIAACUAAAAAAAAAAAAwwDsAAABCAAAA",
+              "Title": "SketchPoint.cs",
+              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\SketchPoint.cs",
+              "RelativeDocumentMoniker": "SketchPoint.cs",
+              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\SketchPoint.cs",
+              "RelativeToolTip": "SketchPoint.cs",
+              "ViewState": "AQIAAC0AAAAAAAAAAAAAAEUAAAARAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-13T20:38:22.159Z",
+              "WhenOpened": "2024-03-15T22:11:53.864Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 1,
+              "Title": "SketchPolyline.cs",
+              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\SketchPolyline.cs",
+              "RelativeDocumentMoniker": "SketchPolyline.cs",
+              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\SketchPolyline.cs",
+              "RelativeToolTip": "SketchPolyline.cs",
+              "ViewState": "AQIAABwAAAAAAAAAAAAAAC8AAAARAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-15T22:10:37.153Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 3,
               "Title": "GetRemoteData.cs",
               "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\GetRemoteData.cs",
               "RelativeDocumentMoniker": "Utils\\GetRemoteData.cs",
               "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\GetRemoteData.cs",
               "RelativeToolTip": "Utils\\GetRemoteData.cs",
-              "ViewState": "AQIAALoAAAAAAAAAAIAwwNkAAAANAAAA",
+              "ViewState": "AQIAALgAAAAAAAAAAAAwwM4AAAAnAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-12T18:54:26.749Z"
+              "WhenOpened": "2024-03-15T21:23:11.259Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "ULDKDockpane.xaml",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpane.xaml",
-              "RelativeDocumentMoniker": "ULDKDockpane.xaml",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpane.xaml",
-              "RelativeToolTip": "ULDKDockpane.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-03-12T18:41:55.668Z",
-              "EditorCaption": ""
+              "DocumentIndex": 2,
+              "Title": "SketchPolygon.cs",
+              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\SketchPolygon.cs",
+              "RelativeDocumentMoniker": "SketchPolygon.cs",
+              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\SketchPolygon.cs",
+              "RelativeToolTip": "SketchPolygon.cs",
+              "ViewState": "AQIAAA8AAAAAAAAAAAAAACUAAAA1AAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-15T21:17:54.103Z"
             },
             {
               "$type": "Document",
               "DocumentIndex": 4,
-              "Title": "Constants.cs",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Constants.cs",
-              "RelativeDocumentMoniker": "Utils\\Constants.cs",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Constants.cs",
-              "RelativeToolTip": "Utils\\Constants.cs",
-              "ViewState": "AQIAAAUAAAAAAAAAAIAwwBQAAACnAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-12T18:31:41.92Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
               "Title": "Resource.resx",
               "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Resource.resx",
               "RelativeDocumentMoniker": "Resource.resx",
               "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Resource.resx",
               "RelativeToolTip": "Resource.resx",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2024-03-12T12:56:58.699Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-15T11:58:27.249Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ULDKClient.csproj",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKClient.csproj",
-              "RelativeDocumentMoniker": "ULDKClient.csproj",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKClient.csproj",
-              "RelativeToolTip": "ULDKClient.csproj",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000758|",
-              "WhenOpened": "2024-03-11T21:15:28.39Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 6,
               "Title": "ULDKDockpaneViewModel.cs",
               "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpaneViewModel.cs",
               "RelativeDocumentMoniker": "ULDKDockpaneViewModel.cs",
               "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpaneViewModel.cs",
               "RelativeToolTip": "ULDKDockpaneViewModel.cs",
-              "ViewState": "AQIAAEoCAAAAAAAAAAAAAGACAABSAAAA",
+              "ViewState": "AQIAACsAAAAAAAAAAAAgwIEAAAAjAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-11T12:43:06.492Z",
-              "EditorCaption": ""
+              "WhenOpened": "2024-03-15T09:13:44.771Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "Helpers.cs",
+              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Helpers.cs",
+              "RelativeDocumentMoniker": "Utils\\Helpers.cs",
+              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Helpers.cs",
+              "RelativeToolTip": "Utils\\Helpers.cs",
+              "ViewState": "AQIAADUBAAAAAAAAAAAgwEYBAAAcAAAA",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2024-03-13T20:50:01.919Z"
             }
           ]
         }

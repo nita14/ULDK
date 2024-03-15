@@ -1,9 +1,11 @@
 ﻿using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
+using ArcGIS.Desktop.Framework.Dialogs;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using System.Threading.Tasks;
-using System.Windows.Controls;
+using ULDKClient.Utils;
 
 namespace ULDKClient
 {
@@ -27,25 +29,31 @@ namespace ULDKClient
 
         protected override Task<bool> OnSketchCompleteAsync(Geometry geometry)
         {
-            Polyline polyline = geometry as Polyline;
 
-            //check the wkid
-            if (polyline.SpatialReference.Wkid != 2180)
+            return QueuedTask.Run(async () =>
             {
-                polyline = GeometryEngine.Instance.Project(polyline, ULDKDockpaneViewModel._sp2180) as Polyline;
-            }
+                Polyline polyline = geometry as Polyline;
 
-            //check the length
-            if (polyline.Length > 500) {
+                //check the wkid
+                if (polyline.SpatialReference.Wkid != Constants.SPATIAL_REF_2180_WKID)
+                {
+                    polyline = GeometryEngine.Instance.Project(polyline, ULDKDockpaneViewModel._sp2180) as Polyline;
+                }
 
-                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.SKETCH_LINE_LENGTH_OVER_LIMIT);          
-            
-            }
+                //check the length
+                if (polyline.Length > 500)
+                {
 
-            FrameworkApplication.SetCurrentToolAsync("esri_mapping_exploreTool");
-            ULDKDockpaneViewModel.ProcessPolylineFromSketch(polyline);
+                    MessageBox.Show(Resource.SKETCH_LINE_LENGTH_OVER_LIMIT);
+                }
 
-            return base.OnSketchCompleteAsync(geometry);
+                await Helpers.ProcessPolylineFromSketchAsync(polyline);
+
+                return true;
+
+
+            });
+                
         }
     }
 }

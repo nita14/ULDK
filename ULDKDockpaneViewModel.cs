@@ -1,5 +1,4 @@
-﻿using ArcGIS.Core.CIM;
-using ArcGIS.Core.Data;
+﻿using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Data.Exceptions;
 using ArcGIS.Core.Geometry;
@@ -7,7 +6,6 @@ using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Internal.Editing;
 using ArcGIS.Desktop.Mapping;
 using Serilog;
 using System;
@@ -32,11 +30,7 @@ namespace ULDKClient
         public static string _projectParentFolder = null;
         public static MapView _mapView = null;
         public static SpatialReference _sp2180 = null;
-       
-
-
-
-
+        public static GetRemoteData _grdInstance = null;
 
         protected ULDKDockpaneViewModel()
         {
@@ -51,28 +45,42 @@ namespace ULDKClient
             if (!_isInitialized)
             {
 
-                _projectParentFolder = System.IO.Directory.GetParent(Project.Current.URI).FullName + @"\";
-                
-
+                _projectParentFolder = Directory.GetParent(Project.Current.URI).FullName + @"\";
+                //Getting the logger
                 PrepareAndConfigureLogger(_projectParentFolder);
 
-                _isInitialized = true;
-
-                //Getting Communes
-                Log.Information("Getting dictionary data from a remote URL...");
+                //Getting dictionaries
+                Log.Information("Getting dictionary data from a remote URL and setting the local db...");
                 try
                 {
+                    //getting communes
+                    _communes = await GetRemoteData.GetInstance().GetCommuneDataAsync();
+                    if (_communes == null)
+                    {
+                        Log.Error("Error encountered while getting communes.");
+                    }
+                    else
+                    {
+                        Log.Information("Communes downloaded: {0}.", _communes.Count());
+                    }
 
-                    _communes = await GetRemoteData.GetCommuneDataAsync();
-                    Log.Information("Communes downloaded: {0}.", _communes.Count());
+                    //getting region
+                    _regions = await GetRemoteData.GetInstance().GetRegionDataAsync();
+                    if (_regions == null)
+                    {
+                        Log.Error("Error encountered while getting regions.");
+                    }
+                    else
+                    {
+                        Log.Information("Communes downloaded: {0}.", _regions.Count());
+                    }
 
-                    _regions = await GetRemoteData.GetRegionDataAsync();
-                    Log.Information("Regions downloaded: {0}.", _regions.Count());
+                    //local gdb and fc setup
+                    await Helpers.CheckOrCreateLocalGDB(_projectParentFolder);
+                    Log.Information("Local GDB and fc created.");
 
-                    await CheckOrCreateLocalGDB(_projectParentFolder);
-
-
-                    await QueuedTask.Run(async () =>
+                    //initialize constants
+                    await QueuedTask.Run(() =>
                     {
                         _currentMap = MapView.Active.Map;
                         _graphicsLayer = Helpers.GetGraphicsLayer(_currentMap);
@@ -80,35 +88,26 @@ namespace ULDKClient
                         _sp2180 = new SpatialReferenceBuilder(Constants.SPATIAL_REF_2180_WKID).ToSpatialReference();
                     });
 
+                    _isInitialized = true;
 
 
                 }
                 catch (Exception ex)
                 {
-                    //string errormsg = Resources.ResourceManager
-                    ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_REGION_ERROR);
+                    MessageBox.Show(Resource.COMMUNE_REGION_ERROR);
                     Log.Fatal(ex.InnerException.Message);
                     Log.Fatal(ex.StackTrace.ToString());
+                    return;
                 };
+
 
 
             }
 
         }
 
-        protected override async void OnShow(bool isVisible)
-        {
-
-
-
-        }
-
-
         protected async override Task UninitializeAsync()
         {
-            // Reset Default Save Directory when dockpane closes // 
-            DockPane pane = FrameworkApplication.DockPaneManager.Find(_dockPaneID);
-
             await base.UninitializeAsync();
         }
 
@@ -136,10 +135,6 @@ namespace ULDKClient
 
             pane.Activate();
 
-
-
-
-
         }
 
 
@@ -156,11 +151,11 @@ namespace ULDKClient
             var detector = new Utils.LogErrorDetector();
 
             //check or create an ULDK directory
-            System.IO.Directory.CreateDirectory(Path.Join(projectParentFolder, "GUGIK"));
+            System.IO.Directory.CreateDirectory(Path.Join(projectParentFolder, Constants.PROJECT_SUBFOLDER));
 
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
-                .WriteTo.File(Path.Join(projectParentFolder, "GUGIK", "ULDK_log_" + CurrentDateTime + ".txt")) // log file.
+                .WriteTo.File(Path.Join(projectParentFolder, Constants.PROJECT_SUBFOLDER, "ULDK_log_" + CurrentDateTime + ".txt")) // log file.
                 .WriteTo.Sink(detector)
                 .CreateLogger();
 
@@ -169,96 +164,6 @@ namespace ULDKClient
 
 
         }
-
-        /// <summary>
-        /// Checks if the file gdb exists, if not creates it with feature class
-        /// </summary>
-        /// <param name="projectParentFolder"></param>
-        /// <returns></returns>
-        private async static Task CheckOrCreateLocalGDB(string projectParentFolder)
-
-        {
-
-            string gdbPath = Path.Combine(projectParentFolder, "GUGIK", "GUGIK.gdb");
-
-            if (Directory.Exists(gdbPath))
-            {
-                Log.Information("File GDB already exists.");
-
-                await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
-                {
-                    new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
-                });
-
-
-            }
-            else
-            {
-
-                Log.Information("File GDB does not exists. Creating...");
-
-
-                FileGeodatabaseConnectionPath fileGdbConnectionPath =
-                    new FileGeodatabaseConnectionPath(new System.Uri(gdbPath));
-
-                try
-                {
-
-                    using (Geodatabase geodatabase =
-                        SchemaBuilder.CreateGeodatabase(fileGdbConnectionPath))
-
-                    {
-                    }
-
-                }
-                catch (GeodatabaseWorkspaceException ex)
-                {
-                    Log.Information("File gdb already exists. Path: " + fileGdbConnectionPath.ToString());
-                }
-                catch (GeodatabaseException gex)
-                {
-                    Log.Fatal("A geodatabase-related exception has occurred.");
-                    Log.Fatal(gex.Message.ToLower());
-                }
-                catch (Exception aex)
-                {
-                    Log.Fatal("Another fatal error occurred.");
-                    Log.Fatal(aex.GetType().FullName);
-                    Log.Fatal(aex.Message.ToLower());
-                }
-
-                Log.Information("File GDB created. Path: " + fileGdbConnectionPath.Path.AbsolutePath);
-
-            }
-
-            //check or create Results feature class
-            Log.Information("Checking if the results feature class already exists...");
-            bool fcExists = await Utils.Helpers.FeatureClassExistsAsync(gdbPath, Utils.Constants.FC_RESULTS_NAME);
-
-            if (fcExists)
-            {
-                Log.Information("The results feature class already exists.");
-            }
-            else
-            {
-                Log.Information("The results feature class needs to be created.");
-                bool fcCreated = await Utils.Helpers.CreateResultsFeatureClassAsync(gdbPath, Utils.Constants.FC_RESULTS_NAME);
-
-                if (fcCreated)
-                {
-                    Log.Information("The results feature class has been created.");
-                }
-                else
-                {
-                    Log.Fatal("The results feature class has NOT been created.");
-
-                }
-
-            }
-            Log.Information("Initilizing UI...");
-        }
-
-
 
         private string _parcelIdFull = "";
         public string ParcelIdFull
@@ -285,7 +190,7 @@ namespace ULDKClient
                 else if (value != null && value.Length > 0 && ParcelIdFull.Split(".").Length > 2)
                 {
                     ParcelIdFull = ParcelIdFull.Split(".")[0] + "." + ParcelIdFull.Split(".")[1] + "." + value;
-                    
+
                 }
 
 
@@ -295,9 +200,6 @@ namespace ULDKClient
         /// Sketch reference
         /// </summary>
         /// 
-
-
-
 
         //Region dropdwon handlers
 
@@ -329,7 +231,9 @@ namespace ULDKClient
                     if (value != null && ParcelIdFull.Split(".").Length >= 2)
                     {
                         ParcelIdFull = ParcelIdFull.Split(".")[0] + "." + value.Number;
-                    } else if (value != null && ParcelIdFull.Length > 0) {
+                    }
+                    else if (value != null && ParcelIdFull.Length > 0)
+                    {
                         ParcelIdFull += "." + value.Number;
                     }
 
@@ -340,11 +244,12 @@ namespace ULDKClient
             }
         }
 
-        //isEbaled
+        //isEnabled
 
         private bool _showGeoportalBtnEnabled = false;
-        public bool ShowGeoportalBtnEnabled {
-            
+        public bool ShowGeoportalBtnEnabled
+        {
+
             get => _showGeoportalBtnEnabled;
             set => SetProperty(ref _showGeoportalBtnEnabled, value, () => ShowGeoportalBtnEnabled);
 
@@ -398,19 +303,18 @@ namespace ULDKClient
         }
 
 
-        private static async void ZoomToTercExtent(string id, string TercType)
+        private static Task ZoomToTercExtent(string id, string TercType)
         {
 
-            await QueuedTask.Run(async () =>
+            return QueuedTask.Run(async () =>
             {
 
-                Polygon poly = await GetRemoteData.GetTercExtentByIDAsync(id, TercType);
+                Polygon poly = await GetRemoteData.GetInstance().GetTercExtentByIDAsync(id, TercType);
                 //Get the active map view.
-                var mapView = MapView.Active;
-                if (mapView == null || poly == null)
+                if (_mapView == null || poly == null)
                     return;
 
-                await mapView.ZoomToAsync(poly, TimeSpan.FromSeconds(1));
+                await _mapView.ZoomToAsync(poly, TimeSpan.FromSeconds(1));
             });
         }
 
@@ -423,16 +327,15 @@ namespace ULDKClient
                 return new RelayCommand(async () =>
                 {
 
-
                     if (ParcelIdFull != null && ParcelIdFull != "" && ParcelIdFull.Split(".").Length == 3)
                     {
                         //execute command
-                        Parcel parcel = await GetRemoteData.GetParcelByIdAsync(ParcelIdFull);
+                        Parcel parcel = await GetRemoteData.GetInstance().GetParcelByIdAsync(ParcelIdFull);
 
                         //parcel with the specified id does not exist
                         if (parcel == null)
                         {
-                            ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.PARCEL_ID_NOT_EXIST_ERROR);
+                            MessageBox.Show(Resource.PARCEL_ID_NOT_EXIST_ERROR);
                             Log.Information("Cannot find parcel with the id: " + ParcelIdFull);
                             return;
                         }
@@ -441,87 +344,61 @@ namespace ULDKClient
 
                         //Enable show in geoportal button
                         ShowGeoportalBtnEnabled = true;
-                        
-                        _mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
+
+                        await _mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
 
                         //add parcel to graphics layer and feature class
 
-                        AddParcelToGraphicsAndFeatureClass(parcel);
+                        bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(_graphicsLayer, parcel.Geom, parcel.Id);
+                        if (isGraphicadded)
+                        {
+                            Log.Information("Parcel added to graphics layer.");
+
+                        }
+                        else
+                        {
+
+                            Log.Information("Cannot add a parcel to graphics layer.");
+                        }
+
+                        bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, _projectParentFolder);
+                        if (isFeatureAdded)
+                        {
+                            Log.Information("Parcel added to feature class.");
+
+                        }
+                        else
+                        {
+
+                            Log.Information("Cannot add a parcel to feature class.");
+                        }
+
 
                     }
                     else
                     {
-                        ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.COMMUNE_REGION_ERROR);
-                        
+                        MessageBox.Show(Resource.ADD_PARCEL_FAILED);
+
 
                     }
                 });
             }
         }
 
-        public static async Task<bool> AddParcelToGraphicsAndFeatureClass(Parcel parcel)
-        {
-       
-            try 
-            {
-
-                //process the geometry
-                bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(_graphicsLayer, parcel.Geom, parcel.Id);
-                if (isGraphicadded)
-                {
-                    Log.Information("Parcel added to graphics layer.");
-
-                }
-                else
-                {
-
-                    Log.Information("Cannot add a parcel to graphics layer.");
-                }
-
-
-                bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, _projectParentFolder);
-                if (isFeatureAdded)
-                {
-                    Log.Information("Parcel added to feature class.");
-
-                }
-                else
-                {
-
-                    Log.Information("Cannot add a parcel to feature class.");
-                }
-
-                if (isGraphicadded && isFeatureAdded)
-
-                { return true;
-                } else { return false; }
-
-            }
-            catch (Exception ex) {
-                Log.Fatal("AddParcelToGraphicsAndFeatureClass: something went wrong");
-                Log.Fatal(ex.Message.ToString());
-                ArcGIS.Desktop.Framework.Dialogs.MessageBox.Show(Resource.PARCEL_CANNOT_SAVE_GL_FC_ERROR);
-                return false;
-            }
-
-
-
-        }
-
         public ICommand CmdShowParcelInGeoportal
         {
             get
             {
-                return new RelayCommand(async () =>
+                return new RelayCommand(() =>
                 {
                     System.Diagnostics.Process.Start(new System.Diagnostics.ProcessStartInfo
                     {
-                        FileName = "https://mapy.geoportal.gov.pl/imap/?identifyParcel=" + ParcelIdFull,
+                        FileName = Constants.GEOPORTAL_LOCATE_PARCEL_URL + ParcelIdFull,
                         UseShellExecute = true
                     });
-                    
 
-                 
+
+
                 });
             }
         }
@@ -530,9 +407,9 @@ namespace ULDKClient
         {
             get
             {
-                return new RelayCommand(async () =>
+                return new RelayCommand(() =>
                 {
-                    ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPoint");
+                    FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPoint");
                 });
             }
         }
@@ -541,11 +418,9 @@ namespace ULDKClient
         {
             get
             {
-                return new RelayCommand(async () =>
+                return new RelayCommand(() =>
                 {
-                    ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPolyline");
-
-
+                    FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPolyline");
 
                 });
             }
@@ -555,75 +430,23 @@ namespace ULDKClient
         {
             get
             {
-                return new RelayCommand(async () =>
+                return new RelayCommand(() =>
                 {
-                    ArcGIS.Desktop.Framework.FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPolygon");
-
+                    FrameworkApplication.SetCurrentToolAsync("ULDKClient_SketchPolygon");
 
                 });
             }
         }
 
-        public static async void AddParcelToMapfromSketch(MapPoint point) {
-
-            Parcel parcel = await GetRemoteData.GetParcelByPointAsync(point);
-
-            await AddParcelToGraphicsAndFeatureClass(parcel);
-
-            _mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
-
-        }
-
-        public static async void ProcessPolylineFromSketch(Polyline polyline)
-        {
-            // 1. Densify the line
-            Polyline polyDensified = GeometryEngine.Instance.DensifyByLength(polyline, 1) as Polyline;
-                
-            // 2. Get first vertex and fetch parcel and iterate
-            while (polyDensified.Points.Count > 0)
-            {
-                MapPoint mp = polyDensified.Points[0];
-                Parcel parcel = await GetRemoteData.GetParcelByPointAsync(mp);
-                // 3. Add pacel to map, gl and fc
-                await AddParcelToGraphicsAndFeatureClass(parcel);
-                // 4. Bufer the parcel geom by 30cm
-                Polygon parcelGeomBuffer = GeometryEngine.Instance.Buffer(parcel.Geom, 0.50) as Polygon; 
-                // 5. Perform difference densyfied line and parcel geom
-                Polyline polyDensifiedNew = GeometryEngine.Instance.Difference(polyDensified, parcelGeomBuffer) as Polyline;
-                polyDensified = polyDensifiedNew;
-            }
-        }
-
-        public static async void ProcessPolygonFromSketch(Polygon polygon)
-        {
-
-            //1. Geometry, get extent
-
-            Envelope polyExtent = polygon.Extent;
-            double polyExtentXMin = polyExtent.XMin;
-            double polyExtentYMin = polyExtent.YMin;
-            double polyExtentXMax = polyExtent.XMax;
-            double polyExtentYMax = polyExtent.YMax;
-
-            //2. Get all points in the extent (every 0.5 meter) as Multipoint
-            Multipoint fishnetMp = await Helpers.CreateFishnetMultiPointFromExtent(polyExtentXMin, polyExtentYMin, polyExtentXMax, polyExtentYMax);
-
-
-            //3. Intesection (GE) Geometry Sketch and All Points as Multipoint 
-
-            //4. Multipoint that is inside
-
-            throw new NotImplementedException();
-        }
     }
- 
 
 
 
-/// <summary>
-/// Button implementation to show the DockPane.
-/// </summary>
-internal class ULDKDockpane_ShowButton : ArcGIS.Desktop.Framework.Contracts.Button
+
+    /// <summary>
+    /// Button implementation to show the DockPane.
+    /// </summary>
+    internal class ULDKDockpane_ShowButton : ArcGIS.Desktop.Framework.Contracts.Button
     {
         protected override void OnClick()
         {

@@ -7,7 +7,7 @@ namespace ULDKClient.Utils
     /// <summary>
     /// Parcel class for getting results from ULDK
     /// </summary>
-   public class Parcel
+    public class Parcel
     {
         private string _id;
         private string _idLong;
@@ -30,7 +30,7 @@ namespace ULDKClient.Utils
             _requestDate = requestDate;
             _geom = geom;
 
-       
+
         }
 
 
@@ -42,7 +42,7 @@ namespace ULDKClient.Utils
         public string Region { get { return _region; } }
         public DateTime RequestDate { get { return _requestDate; } }
         public Polygon Geom { get { return _geom; } }
-      
-  
+
+
     }
 }

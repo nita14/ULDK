@@ -61,7 +61,16 @@ namespace ULDKClient {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Unable to fetch commune and region data from a remote location. Check the Internet access and whitelist connection to *.github.com.
+        ///   Looks up a localized string similar to Cannot add parcel to graphics layer or/and to feature class..
+        /// </summary>
+        internal static string ADD_PARCEL_FAILED {
+            get {
+                return ResourceManager.GetString("ADD_PARCEL_FAILED", resourceCulture);
+            }
+        }
+        
+        /// <summary>
+        ///   Looks up a localized string similar to Unable to fetch commune and region data from a remote location. Check the Internet access and whitelist connection to *.github.com. Verify the logs in &lt;project path/GUKIK folder&gt;..
         /// </summary>
         internal static string COMMUNE_REGION_ERROR {
             get {

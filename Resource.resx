@@ -117,8 +117,11 @@
   <resheader name="writer">
     <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
   </resheader>
+  <data name="ADD_PARCEL_FAILED" xml:space="preserve">
+    <value>Cannot add parcel to graphics layer or/and to feature class.</value>
+  </data>
   <data name="COMMUNE_REGION_ERROR" xml:space="preserve">
-    <value>Unable to fetch commune and region data from a remote location. Check the Internet access and whitelist connection to *.github.com</value>
+    <value>Unable to fetch commune and region data from a remote location. Check the Internet access and whitelist connection to *.github.com. Verify the logs in &lt;project path/GUKIK folder&gt;.</value>
   </data>
   <data name="PARCEL_CANNOT_SAVE_GL_FC_ERROR" xml:space="preserve">
     <value>Cannot save the parcel in the feature class or add it to the graphics layer.</value>

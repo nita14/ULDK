@@ -18,15 +18,15 @@
             _communeId = communeId;
             _name = name;
             _number = number;
-        
+
         }
 
 
         public long Objectid { get { return _objectid; } }
         public string CommuneId { get { return _communeId; } }
-        public string Name {  get { return _name; } } 
+        public string Name { get { return _name; } }
         public string Number { get { return _number; } }
-      
-  
+
+
     }
 }

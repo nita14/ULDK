@@ -2,9 +2,13 @@
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Data.Exceptions;
+using ArcGIS.Core.Data.UtilityNetwork.Trace;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
+using ArcGIS.Desktop.Framework.Threading.Tasks;
+using ArcGIS.Desktop.Internal.Catalog.PropertyPages.NetworkDataset;
+using ArcGIS.Desktop.Internal.Mapping;
 using ArcGIS.Desktop.Mapping;
 using Serilog;
 using System;
@@ -19,45 +23,112 @@ namespace ULDKClient.Utils
     public class Helpers
     {
 
-
-
-
         private static readonly ILogger log = Log.ForContext<Helpers>();
 
 
+
         /// <summary>
-        /// Checks if the feature class exists in a File geoodatabase
+        /// Checks if the file gdb exists, if not creates it with feature class
         /// </summary>
-        /// <param name="gdbPath"></param>
-        /// <param name="featureClassName"></param>
+        /// <param name="projectParentFolder"></param>
         /// <returns></returns>
-        public async static Task<bool> FeatureClassExistsAsync(string gdbPath, string featureClassName)
+        public static Task<bool> CheckOrCreateLocalGDB(string projectParentFolder)
+
         {
 
-            bool result = false;
-            await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            //queued task on MCT
+            return QueuedTask.Run(() =>
             {
 
-                try
+                string gdbPath = Path.Combine(projectParentFolder, Constants.PROJECT_SUBFOLDER, Constants.GDB_NAME_WITH_EXT);
+                Geodatabase fdgb;
+
+
+                //check if gdb exists
+                if (Directory.Exists(gdbPath))
                 {
+                    Log.Information("File GDB already exists.");
+                    fdgb = new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
 
-                    Geodatabase fGDB = new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
-                    FeatureClassDefinition featureClassDefinition = fGDB.GetDefinition<FeatureClassDefinition>(featureClassName);
+                    //checking if the fc is there
+                    bool fcExists = CheckLocalFC(projectParentFolder);
+                    //if not create a fc
+                    if (!fcExists) { return CreateResultsFeatureClass(gdbPath, Constants.FC_RESULTS_NAME); }
 
-                    result = true;
 
                 }
-                catch
+
+                //does not exist...creating one
+                else
                 {
-                    // GetDefinition throws an exception if the definition doesn't exist
+
+                    Log.Information("File GDB does not exists. Creating...");
+                    FileGeodatabaseConnectionPath fileGdbConnectionPath =
+                        new FileGeodatabaseConnectionPath(new System.Uri(gdbPath));
+
+                    try
+                    {
+                        //creating gdb
+                        using (fdgb = SchemaBuilder.CreateGeodatabase(fileGdbConnectionPath))
+                        {
+                            //create fc
+                            return CreateResultsFeatureClass(gdbPath, Constants.FC_RESULTS_NAME);
+
+                        }
+
+                    }
+                    catch (GeodatabaseWorkspaceException)
+                    {
+                        Log.Information("File gdb already exists. Path: " + fileGdbConnectionPath.ToString());
+                        return true;
+                    }
+                    catch (GeodatabaseException gex)
+                    {
+                        Log.Fatal("A geodatabase-related exception has occurred.");
+                        Log.Fatal(gex.Message.ToLower());
+                        return false;
+                    }
+                    catch (Exception aex)
+                    {
+                        Log.Fatal("Another fatal error occurred.");
+                        Log.Fatal(aex.GetType().FullName);
+                        Log.Fatal(aex.Message.ToLower());
+                        return false;
+                    }
 
                 }
 
-                });
+                return true;
 
-            return result;
-           
-           
+            });
+
+        }
+
+
+        /// <summary>
+        /// Check if the feature class exists in a File geoodatabase
+        /// </summary>
+        /// <param name="projectParentFolder"></param>
+        /// <returns></returns>
+        public static bool CheckLocalFC(string projectParentFolder)
+        {
+
+            Log.Information("Checking if the results feature class already exists...");
+            string gdbPath = Path.Combine(projectParentFolder, Constants.PROJECT_SUBFOLDER, Constants.GDB_NAME_WITH_EXT);
+
+            Geodatabase fGDB = new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
+            FeatureClassDefinition featureClassDefinition = fGDB.GetDefinition<FeatureClassDefinition>(Constants.FC_RESULTS_NAME);
+
+            if (featureClassDefinition == null)
+            {
+                return false;
+
+            }
+            else
+            {
+                return true;
+            }
+
         }
 
         /// <summary>
@@ -66,21 +137,14 @@ namespace ULDKClient.Utils
         /// <param name="gdbPath"></param>
         /// <param name="featureClassName"></param>
         /// <returns></returns>
-        public async static Task<bool> CreateResultsFeatureClassAsync(string gdbPath, string featureClassName)
+        public static bool CreateResultsFeatureClass(string gdbPath, string featureClassName)
         {
+            Geodatabase fGDB = new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
 
-            bool result = false;
-            try
-            {
-
-                await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            SchemaBuilder schemaBuilder = new SchemaBuilder(fGDB);
+            FeatureClassDescription featureClassDescription = new FeatureClassDescription(featureClassName,
+                new List<FieldDescription>()
                 {
-                    Geodatabase fGDB = new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
-
-                    SchemaBuilder schemaBuilder = new SchemaBuilder(fGDB);
-                    FeatureClassDescription featureClassDescription = new FeatureClassDescription(featureClassName,
-                        new List<FieldDescription>()
-                        {
                       new FieldDescription("OID", FieldType.OID),
                       new FieldDescription("Date", FieldType.Date),
                       new FieldDescription("Parcel_id_long", FieldType.String),
@@ -90,30 +154,14 @@ namespace ULDKClient.Utils
                       new FieldDescription("Commune", FieldType.String),
                       new FieldDescription("Region", FieldType.String)
 
-                        },
-                    new ShapeDescription(GeometryType.Polygon, new SpatialReferenceBuilder(2180).ToSpatialReference()));
+                },
+            new ShapeDescription(GeometryType.Polygon, new SpatialReferenceBuilder(2180).ToSpatialReference()));
 
-                    FeatureClassToken featureClassToken = schemaBuilder.Create(featureClassDescription);
+            FeatureClassToken featureClassToken = schemaBuilder.Create(featureClassDescription);
 
-                    // Build status
-                    result = schemaBuilder.Build();
-
-                    if (!result)
-                    {
-                        log.Fatal(string.Join(",", schemaBuilder.ErrorMessages.ToList()));
-
-                    }
-
-                });
-        
-            }
-            catch (Exception ex)
-            {
-                log.Fatal(ex.StackTrace.ToString());
-                
-            }
-
-            return result;
+            // Build status
+            bool buildStatus = schemaBuilder.Build();
+            return buildStatus;
 
         }
 
@@ -123,86 +171,70 @@ namespace ULDKClient.Utils
             var graphicsLyr = map.GetLayersAsFlattenedList().OfType<GraphicsLayer>().FirstOrDefault();
             if (graphicsLyr == null)
             {
-                var graphicsLayerCreationParams = new GraphicsLayerCreationParams { Name = "ULDK", IsVisible = true };
+                var graphicsLayerCreationParams = new GraphicsLayerCreationParams { Name = Constants.GRAPHICS_LAYER_NAME, IsVisible = true };
                 graphicsLyr = LayerFactory.Instance.CreateLayer<GraphicsLayer>(graphicsLayerCreationParams, map);
             }
             return graphicsLyr;
         }
 
-        public static async Task<bool> AddGeometrytoGraphicLayerAsync(GraphicsLayer graphicsLayer, ArcGIS.Core.Geometry.Polygon geom, string parcelId)
+        public static Task<bool> AddGeometrytoGraphicLayerAsync(GraphicsLayer graphicsLayer, Polygon geom, string parcelId)
         {
 
-            bool result = false;
-            try
+            return QueuedTask.Run(() =>
             {
-                await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+
+                CIMStroke outlineStroke = SymbolFactory.Instance.ConstructStroke(CIMColor.CreateRGBColor(255, 0, 0), 1.1, SimpleLineStyle.Solid);
+                CIMPolygonSymbol polySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(CIMColor.CreateRGBColor(255, 0, 0), SimpleFillStyle.Null, outlineStroke);
+                CIMTextSymbol pointSymbol = SymbolFactory.Instance.ConstructTextSymbol(ColorFactory.Instance.RedRGB, 14, "Comic Sans MS", "Regular");
+
+                var polyGraphic = new CIMPolygonGraphic
                 {
+                    Polygon = geom,
+                    Symbol = polySymbol.MakeSymbolReference()
+                };
+
+                //add text symbol
 
 
+                var pointGraphic = new CIMTextGraphic
+                {
+                    Shape = geom.Extent.Center,
+                    Symbol = pointSymbol.MakeSymbolReference(),
+                    Text = parcelId,
+                    ReferenceScale = 100.1,
+                    Placement = Anchor.CenterPoint
 
-                    CIMStroke outlineStroke = SymbolFactory.Instance.ConstructStroke(CIMColor.CreateRGBColor(255, 0, 0), 1.1, SimpleLineStyle.Solid);
-                    CIMPolygonSymbol polySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(CIMColor.CreateRGBColor(255, 0, 0), SimpleFillStyle.Null, outlineStroke);
-                    CIMTextSymbol pointSymbol = SymbolFactory.Instance.ConstructTextSymbol(ColorFactory.Instance.RedRGB, 24, "Comic Sans MS", "Regular");
+                };
 
-                    var polyGraphic = new CIMPolygonGraphic
-                    {
-                        Polygon = geom,
-                        Symbol = polySymbol.MakeSymbolReference()
-                    };
+                graphicsLayer.AddElement(polyGraphic);
+                graphicsLayer.AddElement(pointGraphic);
 
-                    //add text symbol
+                graphicsLayer.ClearSelection();
+
+                return true;
+
+            });
 
 
-                    var pointGraphic = new CIMTextGraphic
-                    {
-                        Shape = geom.Extent.Center,
-                        Symbol = pointSymbol.MakeSymbolReference(),
-                        Text = parcelId,
-                        ReferenceScale = 100.1,
-                        Placement = Anchor.CenterPoint
-
-                    };
-
-                    graphicsLayer.AddElement(polyGraphic);
-                    graphicsLayer.AddElement(pointGraphic);
-
-                    graphicsLayer.ClearSelection();
-
-                    result = true;
-
-                });
-            }
-            catch (Exception ex)
-            {
-                log.Information("Cannot add a graphic to the Graphics Layer.");
-                log.Fatal(ex.StackTrace.ToString());
-
-            }
-            
-            return result;
         }
 
-        public static async Task<bool> AddParceltoFeatureClassAsync(Parcel parcel, string projectParentFolder)
+        public static Task<bool> AddParceltoFeatureClassAsync(Parcel parcel, string projectParentFolder)
         {
-            string message = "";
-            bool result = false;
-            try
-            {
-                await ArcGIS.Desktop.Framework.Threading.Tasks.QueuedTask.Run(() =>
+            return QueuedTask.Run(() =>
                 {
 
-                    Uri fgbPath = new System.Uri(System.IO.Path.Combine(projectParentFolder, "GUGIK", "GUGIK.gdb"));
+                    Uri fgbPath = new System.Uri(System.IO.Path.Combine(projectParentFolder, Constants.PROJECT_SUBFOLDER, Constants.GDB_NAME_WITH_EXT));
 
 
                     using (Geodatabase fgdb = new Geodatabase(new FileGeodatabaseConnectionPath(fgbPath)))
-                    using (FeatureClass fc = fgdb.OpenDataset<FeatureClass>("ULDK"))
+                    using (FeatureClass fc = fgdb.OpenDataset<FeatureClass>(Constants.FC_RESULTS_NAME))
 
                     {
-                                                        
+
                         EditOperation editOperation = new EditOperation();
                         editOperation.Callback(context =>
                         {
-                        FeatureClassDefinition parcelSiteDefinition = fc.GetDefinition();
+                            FeatureClassDefinition parcelSiteDefinition = fc.GetDefinition();
                             using (RowBuffer rowBuffer = fc.CreateRowBuffer())
                             {
                                 rowBuffer["Date"] = parcel.RequestDate;
@@ -220,43 +252,90 @@ namespace ULDKClient.Utils
                                 Project.Current.SaveEditsAsync();
                             }
                         }, fc);
-                    
-                        try
-                        {
-                            result = editOperation.Execute();
-                            if (!result) {
-                                message = editOperation.ErrorMessage;
-                                Log.Fatal("Cannot save a parcel in a feature class.");
-                                Log.Fatal(message);
-                            }
-                            
 
-                        }
-                        catch (GeodatabaseException exObj)
+                        bool result = editOperation.Execute();
+                        if (!result)
                         {
-                            message = exObj.Message;
-
-                            Log.Fatal("Cannot save a parcel in a feature class. GDB exception.");
+                            string message = editOperation.ErrorMessage;
+                            Log.Fatal("Cannot save a parcel in a feature class.");
                             Log.Fatal(message);
                         }
-                        
+                        return result;
+
+
                     }
 
+
                 });
-            }
-            catch (Exception ex)
-            {
-                log.Information("Cannot add a feature to the feature class.");
-                log.Fatal(ex.StackTrace.ToString());
 
-            }
-
-            return result;
         }
+
+        public static Task<bool> ProcessPolylineFromSketchAsync(Polyline polyline)
+        {
+
+            return QueuedTask.Run(async () =>
+            {
+
+                // 1. Densify the line
+                Polyline polyDensified = GeometryEngine.Instance.DensifyByLength(polyline, 1) as Polyline;
+
+                // 2. Get first vertex and fetch parcel and iterate
+                while (polyDensified.Points.Count > 0)
+                {
+                    MapPoint mp = polyDensified.Points[0];
+                    Parcel parcel = await GetRemoteData.GetInstance().GetParcelByPointAsync(mp);
+                    // 3. Add pacel to map, gl and fc
+                    bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(ULDKDockpaneViewModel._graphicsLayer, parcel.Geom, parcel.Id);
+                    bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, ULDKDockpaneViewModel._projectParentFolder);
+
+                    // 4. Bufer the parcel geom by 50cm
+                    Polygon parcelGeomBuffer = GeometryEngine.Instance.Buffer(parcel.Geom, 0.50) as Polygon;
+                    // 5. Perform difference densyfied line and parcel geom
+                    Polyline polyDensifiedNew = GeometryEngine.Instance.Difference(polyDensified, parcelGeomBuffer) as Polyline;
+                    polyDensified = polyDensifiedNew;
+                }
+                return true;
+            });
+
+
+        }
+
+
+        public static Task<bool> ProcessPolygonFromSketchAsync(Polygon polygon)
+        {
+
+            return QueuedTask.Run(async () =>
+            {
+                //1. Geometry, get extent
+
+                Envelope polyExtent = polygon.Extent;
+                double polyExtentXMin = polyExtent.XMin;
+                double polyExtentYMin = polyExtent.YMin;
+                double polyExtentXMax = polyExtent.XMax;
+                double polyExtentYMax = polyExtent.YMax;
+
+                //2. Get all points in the extent (every 0.5 meter) as Multipoint
+                Multipoint fishnetMp = await CreateFishnetMultiPointFromExtent(polyExtentXMin, polyExtentYMin, polyExtentXMax, polyExtentYMax);
+
+
+                //3. Intesection (GE) Geometry Sketch and All Points as Multipoint 
+
+                //4. Multipoint that is inside
+
+                //throw new NotImplementedException();
+
+                return true;
+            });
+
+        }
+
+
 
         public static async Task<Multipoint> CreateFishnetMultiPointFromExtent(double polyExtentXMin, double polyExtentYMin, double polyExtentXMax, double polyExtentYMax)
         {
             throw new NotImplementedException();
         }
+
+
     }
 }
