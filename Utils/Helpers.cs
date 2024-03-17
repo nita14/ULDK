@@ -2,21 +2,21 @@
 using ArcGIS.Core.Data;
 using ArcGIS.Core.Data.DDL;
 using ArcGIS.Core.Data.Exceptions;
-using ArcGIS.Core.Data.UtilityNetwork.Trace;
 using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Core;
 using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
-using ArcGIS.Desktop.Internal.Catalog.PropertyPages.NetworkDataset;
-using ArcGIS.Desktop.Internal.Mapping;
 using ArcGIS.Desktop.Mapping;
 using Serilog;
 using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using System.Windows.Media;
 using FieldDescription = ArcGIS.Core.Data.DDL.FieldDescription;
+using Geometry = ArcGIS.Core.Geometry.Geometry;
 
 namespace ULDKClient.Utils
 {
@@ -314,15 +314,27 @@ namespace ULDKClient.Utils
                 double polyExtentXMax = polyExtent.XMax;
                 double polyExtentYMax = polyExtent.YMax;
 
-                //2. Get all points in the extent (every 0.5 meter) as Multipoint
+                //2. Get all points in the extent (every 1 meter) as Multipoint
                 Multipoint fishnetMp = await CreateFishnetMultiPointFromExtent(polyExtentXMin, polyExtentYMin, polyExtentXMax, polyExtentYMax);
 
-
                 //3. Intesection (GE) Geometry Sketch and All Points as Multipoint 
+                Multipoint fishnetCropped = GeometryEngine.Instance.Intersection(fishnetMp, polygon) as Multipoint;
 
-                //4. Multipoint that is inside
+                //4. Take first point in the fishnet and process the extent
+                while (fishnetCropped.PointCount > 0)
+                {
+                    Parcel parcel = await GetRemoteData.GetInstance().GetParcelByPointAsync(fishnetCropped.Points[0]);
+                    // 3. Add pacel to map, gl and fc
+                    bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(ULDKDockpaneViewModel._graphicsLayer, parcel.Geom, parcel.Id);
+                    bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, ULDKDockpaneViewModel._projectParentFolder);
 
-                //throw new NotImplementedException();
+                    // 4. Bufer the parcel geom by 50cm
+                    Polygon parcelGeomBuffer = GeometryEngine.Instance.Buffer(parcel.Geom, 0.50) as Polygon;
+                    // 5. Perform difference densyfied line and parcel geom
+                    Multipoint fishnetCroppedNew = GeometryEngine.Instance.Difference(fishnetCropped, parcelGeomBuffer) as Multipoint;
+                    fishnetCropped = fishnetCroppedNew;
+
+                }
 
                 return true;
             });
@@ -333,9 +345,115 @@ namespace ULDKClient.Utils
 
         public static async Task<Multipoint> CreateFishnetMultiPointFromExtent(double polyExtentXMin, double polyExtentYMin, double polyExtentXMax, double polyExtentYMax)
         {
-            throw new NotImplementedException();
+
+            Multipoint fishnetMp;
+            List<MapPoint> points = new List<MapPoint>();
+
+            double horizontalSpan = (polyExtentXMax - polyExtentXMin) + 2;
+            double verticalSpan = (polyExtentYMax - polyExtentYMin) + 2;
+
+            double x = polyExtentXMin;
+            double y = polyExtentYMin;
+
+            for (int i = 0; i < horizontalSpan * verticalSpan; i++)
+            {
+
+
+                var point = MapPointBuilderEx.CreateMapPoint(x, y);
+                points.Add(point);
+
+                // break, if already outside of envelope
+                if (x >= polyExtentXMax && y >= polyExtentYMax)
+                {
+                    break;
+                }
+
+                if (y <= polyExtentYMax)
+                {
+                    y = y + 1;
+                }
+                else
+
+                {
+                    x = x + 1;
+                    y = polyExtentYMin;
+                }
+
+
+
+            }
+
+            fishnetMp = MultipointBuilderEx.CreateMultipoint(points, ULDKDockpaneViewModel._sp2180);
+
+
+            return fishnetMp;
+
+
         }
+        /// <summary>
+        /// Add a sketch geomtry to the map
+        /// </summary>
+        /// <param name="graphicsLayer"></param>
+        /// <param name="geom"></param>
+        /// <returns></returns>
+        public static Task<bool> AddSketchToGraphicLayerAsync(Geometry geom)
+        {
+            return QueuedTask.Run(() =>
+            {
+
+                bool res = false;
+
+                if (geom.GeometryType == GeometryType.Point)
+                {
+                    var circlePtSymbol = SymbolFactory.Instance.ConstructPointSymbol(ColorFactory.Instance.BlackRGB, 6, SimpleMarkerStyle.Cross);
+                    var pointGraphic = new CIMPointGraphic
+                    {
+                        Location = geom as MapPoint,
+                        Symbol = circlePtSymbol.MakeSymbolReference(),
+                        ReferenceScale = 100.1,
+                        Placement = Anchor.CenterPoint
+
+                    };
+                    ULDKDockpaneViewModel._graphicsLayer.AddElement(pointGraphic);
+                    ULDKDockpaneViewModel._graphicsLayer.ClearSelection();
+                    res = true;
+                }
+                else if (geom.GeometryType == GeometryType.Polyline)
+                {
+
+                    var lineSymbol = SymbolFactory.Instance.ConstructLineSymbol(ColorFactory.Instance.BlackRGB, 2.0, SimpleLineStyle.Dash);
+                    //create a CIMGraphic 
+                    var graphic = new CIMLineGraphic()
+                    {
+                        Symbol = lineSymbol.MakeSymbolReference(),
+                        Line = geom as Polyline
+                    };
+                    ULDKDockpaneViewModel._graphicsLayer.AddElement(graphic);
+                    ULDKDockpaneViewModel._graphicsLayer.ClearSelection();
+                    res = true;
 
 
+                }
+                else if (geom.GeometryType == GeometryType.Polygon)
+                {
+                    CIMStroke outlineStroke = SymbolFactory.Instance.ConstructStroke(ColorFactory.Instance.BlackRGB, 2, SimpleLineStyle.Solid);
+                    var polySymbol = SymbolFactory.Instance.ConstructPolygonSymbol(ColorFactory.Instance.BlackRGB, SimpleFillStyle.BackwardDiagonal, outlineStroke);
+                    //create a CIMGraphic 
+                    var graphic = new CIMPolygonGraphic()
+                    {
+                        Symbol = polySymbol.MakeSymbolReference(),
+                        Polygon = geom as Polygon
+                    };
+                    ULDKDockpaneViewModel._graphicsLayer.AddElement(graphic);
+                    ULDKDockpaneViewModel._graphicsLayer.ClearSelection();
+                    res = true;
+
+
+                }
+
+                return res;
+
+            });
+        }
     }
 }

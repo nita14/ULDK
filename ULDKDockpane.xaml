@@ -7,7 +7,7 @@
              xmlns:ui="clr-namespace:ULDKClient"
              xmlns:extensions="clr-namespace:ArcGIS.Desktop.Extensions;assembly=ArcGIS.Desktop.Extensions"
              mc:Ignorable="d" 
-             d:DesignHeight="400" d:DesignWidth="320"
+             d:DesignHeight="450" d:DesignWidth="320"
              d:DataContext="{Binding Path=ui.ULDKDockpaneViewModel}">
     <UserControl.Resources>
         <ResourceDictionary>
@@ -36,9 +36,9 @@
                 <RowDefinition/>
             </Grid.RowDefinitions>
             <Grid Grid.Column="0" Grid.Row="0" Margin="0,10,10,10">
-                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="5,5,5,5"
-								 Style="{DynamicResource Esri_TextBlockDockPaneHeader}" FontSize="15" FontWeight="DemiBold" 
-								 Text="ULDK - Parcel locator service" />
+                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="0,5,0,5" TextWrapping="Wrap" 
+								 Style="{DynamicResource Esri_TextBlockDockPaneHeader}" FontSize="14" FontWeight="DemiBold" 
+								 Text="ULDK is a web service hosted by the Head Office of Geodesy and Cartography (GUGiK). Its spatial coverage is limited to Poland only." />
             </Grid>
             <Grid Grid.Column="0" Grid.Row="1" Margin="0,10,0,0">
                 <Expander Name="ExpanderDrawMap" Header="Find a parcel by drawing a shape:"   
@@ -52,52 +52,49 @@
                             </Grid.RowDefinitions>
                             <Grid.ColumnDefinitions>
                                 <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
                             </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" Grid.Row="0" Margin="5,25,5,5">
-                                <Button HorizontalAlignment="Center" Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPoint}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" Margin="2" Grid.Column="0" />
-                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBlock Text="Point    " />
-                                        </StackPanel>
-                                    </Grid>
-                                </Button>
-                            </Grid>
-                            <Grid Grid.Column="1" Grid.Row="0" Margin="5,25,5,5">
-                                <Button HorizontalAlignment="Center" Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolyline}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" Margin="2" Grid.Column="0" />
-                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBlock Text="Polyline" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Button>
+                            <Grid Grid.Column="0" Grid.Row="0" Margin="1,25,1,5">
+                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+                                    <Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPoint}" Margin="2,0,10,0">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" Margin="2" Grid.Column="0" />
+                                            <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="Point    " />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+                                    <Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolyline}" Margin="2,0,10,0">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" Margin="2" Grid.Column="0" />
+                                            <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="Polyline" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+                                    <Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolygon}" Margin="2,0,10,0">
+                                        <Grid>
+                                            <Grid.ColumnDefinitions>
+                                                <ColumnDefinition Width="Auto" />
+                                                <ColumnDefinition Width="Auto" />
+                                            </Grid.ColumnDefinitions>
+                                            <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" Margin="2" Grid.Column="0" />
+                                            <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+                                                <TextBlock Text="Polygon" />
+                                            </StackPanel>
+                                        </Grid>
+                                    </Button>
+                                </StackPanel>
                             </Grid>
 
-                            <Grid Grid.Column="2" Grid.Row="0" Margin="5,25,5,5">
-                                <Button HorizontalAlignment="Center" Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolygon}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" Margin="2" Grid.Column="0" />
-                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBlock Text="Polygon" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Button>
-                            </Grid>
+
 
                         </Grid>
 
@@ -107,7 +104,7 @@
         </Grid>
         <Grid Grid.Column="0" Grid.Row="1" Margin="10,10,10,10">
 
-            <Expander Name="ExpanderTerytSelection" Header="Find a parcel by its number:"   
+            <Expander Name="ExpanderTerytSelection" Header="Find a parcel by its official number:"   
                 ExpandDirection="Down" IsExpanded="False" Width="Auto" MinHeight="200" VerticalAlignment="Top">
 
 

@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Serilog;
 using System.Threading.Tasks;
 using ULDKClient.Utils;
 
@@ -11,6 +12,8 @@ namespace ULDKClient
 {
     internal class SketchPolygon : MapTool
     {
+
+        private static readonly ILogger log = Log.ForContext<Helpers>();
         public SketchPolygon()
         {
             IsSketchTool = true;
@@ -41,12 +44,16 @@ namespace ULDKClient
                 }
 
                 //check the area
-                if (polygon.Area > 10000)
+                if (polygon.Area > Constants.POLYGON_MAX_AREA_SQ_METERS)
                 {
 
                     MessageBox.Show(Resource.SKETCH_POLYGON_AREA_OVER_LIMIT);
-
+                    log.Information("Polygon area over the limit.");
+                    return true;
                 }
+
+                //add point to the map
+                bool isPolygoneadded = await Helpers.AddSketchToGraphicLayerAsync(polygon);
 
                 await Helpers.ProcessPolygonFromSketchAsync(polygon);
                 return true;

@@ -4,6 +4,7 @@ using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
+using Serilog;
 using System.Threading.Tasks;
 using ULDKClient.Utils;
 
@@ -11,6 +12,9 @@ namespace ULDKClient
 {
     internal class SketchPolyline : MapTool
     {
+
+        private static readonly ILogger log = Log.ForContext<Helpers>();
+
         public SketchPolyline()
         {
             IsSketchTool = true;
@@ -41,11 +45,16 @@ namespace ULDKClient
                 }
 
                 //check the length
-                if (polyline.Length > 500)
+                if (polyline.Length > Constants.POLYLINE_MAX_LENGTH_METERS)
                 {
 
                     MessageBox.Show(Resource.SKETCH_LINE_LENGTH_OVER_LIMIT);
+                    log.Information("Line length over the limit.");
+                    return true;
                 }
+
+                //add point to the map
+                bool isPolylineadded = await Helpers.AddSketchToGraphicLayerAsync(polyline);
 
                 await Helpers.ProcessPolylineFromSketchAsync(polyline);
 

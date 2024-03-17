@@ -172,6 +172,15 @@ namespace ULDKClient
             set => SetProperty(ref _parcelIdFull, value);
         }
 
+        private string _statusProcessingSketch =  Constants.STATUS_PROCES_FREE;
+        public string StatusProcessingSketch
+        {
+            get => _statusProcessingSketch;
+            set => SetProperty(ref _statusProcessingSketch, value);
+        }
+
+
+
         private string _parcelId = "";
         public string ParcelId
         {

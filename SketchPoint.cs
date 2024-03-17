@@ -37,10 +37,13 @@ namespace ULDKClient
                 MapPoint point = geometry as MapPoint;
 
                 //check the spatial reference
-                if (point.SpatialReference.Wkid != Utils.Constants.SPATIAL_REF_2180_WKID)
+                if (point.SpatialReference.Wkid != Constants.SPATIAL_REF_2180_WKID)
                 {
                     point = GeometryEngine.Instance.Project(point, ULDKDockpaneViewModel._sp2180) as MapPoint;
                 }
+                //add point to the map
+                bool isPointadded = await Helpers.AddSketchToGraphicLayerAsync(point);
+
 
                 //get parcel
                 Parcel parcel = await GetRemoteData.GetInstance().GetParcelByPointAsync(point);
@@ -74,11 +77,6 @@ namespace ULDKClient
 
 
             });
-  
-
-
-
-
 
         }
     }

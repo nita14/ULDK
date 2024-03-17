@@ -1,11 +1,11 @@
 ﻿<ArcGIS defaultAssembly="ULDKClient.dll" defaultNamespace="ULDKClient" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
   <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.1.41833">
-    <Name>ULDK Client</Name>
-    <Description>ArcGIS Pro Add-in to consume ULDK service hosted by GUGIK.</Description>
+    <Name>GUGIK Client</Name>
+    <Description>ArcGIS Pro Add-in to consume GUGIK services and APIs.</Description>
     <Image>Images\AddinDesktop32.png</Image>
     <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
-    <Company>Acme</Company>
-    <Date>10/20/2023 9:00:00 PM</Date>
+    <Company>Private</Company>
+    <Date>30/03/2024</Date>
     <Subject>Content, Framework</Subject>
     <!-- Note subject can be one or more of these topics:
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
@@ -14,7 +14,7 @@
     <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1">
       <!-- uncomment to have the control hosted on a separate tab-->
       <tabs>
-        <tab id="ULDKClient_Tab1" caption="ULDK" keytip="Shows ULDK pane">
+        <tab id="ULDKClient_Tab1" caption="GUGIK" keytip="Shows GUGiK pane">
           <group refID="ULDKClient_Group1" />
           <group refID="ULDKClient_GroupSketch" />
         </tab>
