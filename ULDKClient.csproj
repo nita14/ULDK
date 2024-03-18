@@ -9,9 +9,11 @@
     <NoWarn>CA1416</NoWarn>
   </PropertyGroup>
   <ItemGroup>
+    <None Remove="Config.pl.daml" />
     <None Remove="Images\geoportal.png" />
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Config.pl.daml" />
     <Content Include="Config.daml" />
     <Resource Include="Images\geoportal.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
@@ -96,6 +98,11 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Update="Resource.pl.Designer.cs">
+      <DependentUpon>Resource.pl.resx</DependentUpon>
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+    </Compile>
     <Compile Update="Resource.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
@@ -103,6 +110,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <EmbeddedResource Update="Resource.pl.resx">
+      <LastGenOutput>Resource.pl.Designer.cs</LastGenOutput>
+      <Generator>ResXFileCodeGenerator</Generator>
+    </EmbeddedResource>
     <EmbeddedResource Update="Resource.resx">
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resource.Designer.cs</LastGenOutput>

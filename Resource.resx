@@ -133,6 +133,6 @@
     <value>Please draw a line whose length is less than 1 kilometer. Trying to be graceful to ULDK servers...</value>
   </data>
   <data name="SKETCH_POLYGON_AREA_OVER_LIMIT" xml:space="preserve">
-    <value>Please draw a plygon whose area is less than 1 square kilometer (1 km x1 km). Trying to be graceful to ULDK servers...</value>
+    <value>Please draw a polygon whose area is less than 1 square kilometer (1 km x1 km). Trying to be graceful to ULDK servers...</value>
   </data>
 </root>

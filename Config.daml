@@ -5,8 +5,8 @@
     <Image>Images\AddinDesktop32.png</Image>
     <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
     <Company>Private</Company>
-    <Date>30/03/2024</Date>
-    <Subject>Content, Framework</Subject>
+    <Date>15/03/2024</Date>
+    <Subject>GUGIK Client</Subject>
     <!-- Note subject can be one or more of these topics:
                     Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
   </AddInInfo>
