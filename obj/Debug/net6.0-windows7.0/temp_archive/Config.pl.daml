@@ -1,0 +1,61 @@
+﻿<ArcGIS defaultAssembly="ULDKClient.dll" defaultNamespace="ULDKClient" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
+  <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.1.41833">
+    <Name>GUGIK Client</Name>
+    <Description>ArcGIS Pro Add-in to consume GUGIK services and APIs.</Description>
+    <Image>Images\AddinDesktop32.png</Image>
+    <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
+    <Company>Private</Company>
+    <Date>15/03/2024</Date>
+    <Subject>GUGIK Client</Subject>
+    <!-- Note subject can be one or more of these topics:
+                    Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
+  </AddInInfo>
+  <modules>
+    <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1">
+      <!-- uncomment to have the control hosted on a separate tab-->
+      <tabs>
+        <tab id="ULDKClient_Tab1" caption="GUGIK" keytip="Pokaż panel GUGiK">
+          <group refID="ULDKClient_Group1" />
+          <group refID="ULDKClient_GroupSketch" />
+        </tab>
+      </tabs>
+      <groups>
+        <!-- comment this out if you have no controls on the Addin tab to avoid
+              an empty group-->
+        <group id="ULDKClient_Group1" caption="Usługa lokalizacji działek ewidencyjnych (ULDK)" appearsOnAddInTab="false">
+          <!-- host controls within groups -->
+          <button refID="ULDKClient_ULDKDockpane_ShowButton" size="large" />
+        </group>
+        <group id="ULDKClient_GroupSketch" caption="Pobierz działki ze szkicu" appearsOnAddInTab="false">
+          <!-- host controls within groups -->
+          <tool refID="ULDKClient_SketchPoint" size="large" />
+          <tool refID="ULDKClient_SketchPolyline" size="large" />
+          <tool refID="ULDKClient_SketchPolygon" size="large" />
+        </group>
+      </groups>
+      <controls>
+        <!-- add your controls here -->
+        <button id="ULDKClient_ULDKDockpane_ShowButton" caption="Pokaż panel ULDK" className="ULDKDockpane_ShowButton" loadOnClick="true" smallImage="EvaluateFeatures32" largeImage="EvaluateFeatures32">
+          <tooltip heading="ULDK dockpane">Aktywuje panel z Usługą lokalizacji działek ewidencyjnych (ULDK).<disabledText /></tooltip>
+        </button>
+        <tool id="ULDKClient_SketchPoint" caption="Narysuj punkt" className="SketchPoint" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" condition="esri_mapping_mapPane">
+          <tooltip heading="Narysuj punkt">
+            Kliknij, aby narysować punkt na mapie.<disabledText /></tooltip>
+        </tool>
+        <tool id="ULDKClient_SketchPolyline" caption="Narysuj linię" className="SketchPolyline" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" condition="esri_mapping_mapPane">
+          <tooltip heading="Narysuj linię">
+            Kliknij, aby narysować linię na mapie.<disabledText /></tooltip>
+        </tool>
+        <tool id="ULDKClient_SketchPolygon" caption="Narysuj poligon" className="SketchPolygon" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" condition="esri_mapping_mapPane">
+          <tooltip heading="Narysuj poligon">
+            Kliknij, aby narysować poligon na mapie.<disabledText /></tooltip>
+        </tool>
+      </controls>
+      <dockPanes>
+        <dockPane id="ULDKClient_ULDKDockpane" caption="Usługa lokalizacji działek ewidencyjnych (ULDK)" className="ULDKDockpaneViewModel" dock="group" dockWith="esri_core_projectDockPane" hasHelp="true">
+          <content className="ULDKDockpaneView" />
+        </dockPane>
+      </dockPanes>
+    </insertModule>
+  </modules>
+</ArcGIS>

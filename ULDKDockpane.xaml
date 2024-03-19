@@ -9,257 +9,255 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="320"
              d:DataContext="{Binding Path=ui.ULDKDockpaneViewModel}">
-    <UserControl.Resources>
-        <ResourceDictionary>
-            <ResourceDictionary.MergedDictionaries>
-                <extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
-            </ResourceDictionary.MergedDictionaries>
-            <Style TargetType="dotNetKitControls:AutoCompleteComboBox">
-                <Setter Property="ItemsPanel">
-                    <Setter.Value>
-                        <ItemsPanelTemplate>
-                            <VirtualizingStackPanel />
-                        </ItemsPanelTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-        </ResourceDictionary>
-    </UserControl.Resources>
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto" MinHeight="100"/>
-            <RowDefinition/>
-        </Grid.RowDefinitions>
-        <Grid Grid.Column="0" Grid.Row="0" Margin="10,10,10,10">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="Auto"/>
-                <RowDefinition/>
-            </Grid.RowDefinitions>
-            <Grid Grid.Column="0" Grid.Row="0" Margin="0,10,10,10">
-                <TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="0,5,0,5" TextWrapping="Wrap" 
+	<UserControl.Resources>
+		<ResourceDictionary>
+			<ResourceDictionary.MergedDictionaries>
+				<extensions:DesignOnlyResourceDictionary Source="pack://application:,,,/ArcGIS.Desktop.Framework;component\Themes\Default.xaml"/>
+			</ResourceDictionary.MergedDictionaries>
+			<Style TargetType="dotNetKitControls:AutoCompleteComboBox">
+				<Setter Property="ItemsPanel">
+					<Setter.Value>
+						<ItemsPanelTemplate>
+							<VirtualizingStackPanel />
+						</ItemsPanelTemplate>
+					</Setter.Value>
+				</Setter>
+			</Style>
+		</ResourceDictionary>
+	</UserControl.Resources>
+	<Grid>
+		<Grid.RowDefinitions>
+			<RowDefinition Height="Auto" MinHeight="100"/>
+			<RowDefinition/>
+		</Grid.RowDefinitions>
+		<Grid Grid.Column="0" Grid.Row="0" Margin="10,10,10,10">
+			<Grid.RowDefinitions>
+				<RowDefinition Height="Auto"/>
+				<RowDefinition/>
+			</Grid.RowDefinitions>
+			<Grid Grid.Column="0" Grid.Row="0" Margin="0,10,10,10">
+				<TextBlock Grid.Column="0" HorizontalAlignment="Left" Margin="0,5,0,5" TextWrapping="Wrap" 
 								 Style="{DynamicResource Esri_TextBlockDockPaneHeader}" FontSize="14" FontWeight="DemiBold" 
 								 Text="ULDK is a web service hosted by the Head Office of Geodesy and Cartography (GUGiK). Its spatial coverage is limited to Poland only." />
-            </Grid>
-            <Grid Grid.Column="0" Grid.Row="1" Margin="0,10,0,0">
-                <Expander Name="ExpanderDrawMap" Header="Find a parcel by drawing a shape:"   
+			</Grid>
+			<Grid Grid.Column="0" Grid.Row="1" Margin="0,10,0,0">
+				<Expander Name="ExpanderDrawMap" Header="Find a parcel by drawing a shape:"   
                         ExpandDirection="Down" IsExpanded="True" Width="Auto" Height="Auto" VerticalAlignment="Top"
                          Style="{DynamicResource Esri_Expander}">
 
-                    <Expander.Content>
-                        <Grid>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" Grid.Row="0" Margin="1,25,1,5">
-                                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
-                                    <Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPoint}" Margin="2,0,10,0">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" Margin="2" Grid.Column="0" />
-                                            <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <TextBlock Text="Point    " />
-                                            </StackPanel>
-                                        </Grid>
-                                    </Button>
-                                    <Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolyline}" Margin="2,0,10,0">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" Margin="2" Grid.Column="0" />
-                                            <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <TextBlock Text="Polyline" />
-                                            </StackPanel>
-                                        </Grid>
-                                    </Button>
-                                    <Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolygon}" Margin="2,0,10,0">
-                                        <Grid>
-                                            <Grid.ColumnDefinitions>
-                                                <ColumnDefinition Width="Auto" />
-                                                <ColumnDefinition Width="Auto" />
-                                            </Grid.ColumnDefinitions>
-                                            <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" Margin="2" Grid.Column="0" />
-                                            <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                                <TextBlock Text="Polygon" />
-                                            </StackPanel>
-                                        </Grid>
-                                    </Button>
-                                </StackPanel>
-                            </Grid>
+					<Expander.Content>
+						<Grid>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Grid Grid.Column="0" Grid.Row="0" Margin="1,25,1,5">
+								<StackPanel Orientation="Horizontal" HorizontalAlignment="Center">
+									<Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPoint}" Margin="2,0,10,0">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="Auto" />
+												<ColumnDefinition Width="Auto" />
+											</Grid.ColumnDefinitions>
+											<Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" Margin="2" Grid.Column="0" />
+											<StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+												<TextBlock Text="Point    " />
+											</StackPanel>
+										</Grid>
+									</Button>
+									<Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolyline}" Margin="2,0,10,0">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="Auto" />
+												<ColumnDefinition Width="Auto" />
+											</Grid.ColumnDefinitions>
+											<Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/SelectPolygonByPolyline32.png" Margin="2" Grid.Column="0" />
+											<StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+												<TextBlock Text="Polyline" />
+											</StackPanel>
+										</Grid>
+									</Button>
+									<Button Style="{DynamicResource Esri_Button}" Command="{Binding CmdStartSketchPolygon}" Margin="2,0,10,0">
+										<Grid>
+											<Grid.ColumnDefinitions>
+												<ColumnDefinition Width="Auto" />
+												<ColumnDefinition Width="Auto" />
+											</Grid.ColumnDefinitions>
+											<Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" Margin="2" Grid.Column="0" />
+											<StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+												<TextBlock Text="Polygon" />
+											</StackPanel>
+										</Grid>
+									</Button>
+								</StackPanel>
+							</Grid>
 
 
 
-                        </Grid>
+						</Grid>
 
-                    </Expander.Content>
-                </Expander>
-            </Grid>
-        </Grid>
-        <Grid Grid.Column="0" Grid.Row="1" Margin="10,10,10,10">
+					</Expander.Content>
+				</Expander>
+			</Grid>
+		</Grid>
+		<Grid Grid.Column="0" Grid.Row="1" Margin="10,10,10,10">
 
-            <Expander Name="ExpanderTerytSelection" Header="Find a parcel by its official number:"   
+			<Expander Name="ExpanderTerytSelection" Header="Find a parcel by its official number:"   
                 ExpandDirection="Down" IsExpanded="False" Width="Auto" MinHeight="200" VerticalAlignment="Top" Style="{DynamicResource Esri_Expander}">
 
 
-                <Expander.Content>
-                    <Grid>
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                            <RowDefinition Height="Auto"/>
-                        </Grid.RowDefinitions>
-                        <Grid Grid.Column="0" Grid.Row="0" Margin="5,5,5,5">
-                            <TextBlock>Select a commune:</TextBlock>
+				<Expander.Content>
+					<Grid>
+						<Grid.RowDefinitions>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+							<RowDefinition Height="Auto"/>
+						</Grid.RowDefinitions>
+						<Grid Grid.Column="0" Grid.Row="0" Margin="5,5,5,5">
+							<TextBlock>Select a commune:</TextBlock>
 
-                        </Grid>
-                        <Grid Grid.Column="0" Grid.Row="1">
+						</Grid>
+						<Grid Grid.Column="0" Grid.Row="1">
 
-                            <dotNetKitControls:AutoCompleteComboBox SelectedValuePath="Id" TextSearch.TextPath="Name_Full" ItemsSource="{Binding Communes}" 
+							<dotNetKitControls:AutoCompleteComboBox SelectedValuePath="Id" TextSearch.TextPath="Name_Full" ItemsSource="{Binding Communes}" 
                                 SelectedItem="{Binding SelectedCommune}" Margin="5,0,5,5" Height="25" MinWidth="200">
-                                <dotNetKitControls:AutoCompleteComboBox.ItemTemplate>
-                                    <DataTemplate>
-                                        <StackPanel>
-                                            <TextBlock Text="{Binding Name_Full, Mode=OneTime}" FontWeight="Bold" />
-                                            <TextBlock><Run Text="{Binding Id, Mode=OneTime}" /> | <Run Text="{Binding Type, Mode=OneTime}" />
+								<dotNetKitControls:AutoCompleteComboBox.ItemTemplate>
+									<DataTemplate>
+										<StackPanel>
+											<TextBlock Text="{Binding Name_Full, Mode=OneTime}" FontWeight="Bold" />
+											<TextBlock><Run Text="{Binding Id, Mode=OneTime}" /> | <Run Text="{Binding Type, Mode=OneTime}" />
                                                  | <Run Text="{Binding Name, Mode=OneTime}" /></TextBlock>
-                                        </StackPanel>
-                                    </DataTemplate>
-                                </dotNetKitControls:AutoCompleteComboBox.ItemTemplate>
-                            </dotNetKitControls:AutoCompleteComboBox>
+										</StackPanel>
+									</DataTemplate>
+								</dotNetKitControls:AutoCompleteComboBox.ItemTemplate>
+							</dotNetKitControls:AutoCompleteComboBox>
 
 
-                        </Grid>
-                        <Grid Grid.Column="0" Grid.Row="2">
-                            <Grid>
-                                <Grid.ColumnDefinitions>
-                                    <ColumnDefinition Width="1.5*"/>
-                                    <ColumnDefinition Width="*"/>
-                                </Grid.ColumnDefinitions>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto"/>
-                                    <RowDefinition Height="Auto"/>
+						</Grid>
+						<Grid Grid.Column="0" Grid.Row="2">
+							<Grid>
+								<Grid.ColumnDefinitions>
+									<ColumnDefinition Width="1.5*"/>
+									<ColumnDefinition Width="*"/>
+								</Grid.ColumnDefinitions>
+								<Grid.RowDefinitions>
+									<RowDefinition Height="Auto"/>
+									<RowDefinition Height="Auto"/>
 
-                                </Grid.RowDefinitions>
-                                <Grid Grid.Column="0" Grid.Row="0">
-                                    <TextBlock Margin="5,5,5,5">Region id:</TextBlock>
+								</Grid.RowDefinitions>
+								<Grid Grid.Column="0" Grid.Row="0">
+									<TextBlock Margin="5,5,5,5">Region id:</TextBlock>
 
-                                </Grid>
-                                <Grid Grid.Column="0" Grid.Row="1">
-                                    <ComboBox Height="25" Margin="5,-5,5,2"
+								</Grid>
+								<Grid Grid.Column="0" Grid.Row="1">
+									<ComboBox Height="25" Margin="5,-5,5,2"
                                          ItemsSource="{Binding Regions}"                                            
                                          SelectedValue="{Binding SelectedRegion}">
-                                        <ComboBox.ItemTemplate>
-                                            <DataTemplate>
-                                                <TextBlock>
-                                                    <TextBlock.Text>
-                                                        <MultiBinding StringFormat="{}{0} | {1}">
-                                                            <Binding Path="Name"/>
-                                                            <Binding Path="Number"/>
-                                                        </MultiBinding>
-                                                    </TextBlock.Text>
-                                                </TextBlock>
-                                            </DataTemplate>
-                                        </ComboBox.ItemTemplate>
+										<ComboBox.ItemsPanel>
+											<ItemsPanelTemplate>
+												<VirtualizingStackPanel />
+											</ItemsPanelTemplate>
+										</ComboBox.ItemsPanel>
+										<ComboBox.ItemTemplate>
+											<DataTemplate>
+												<TextBlock>
+													<TextBlock.Text>
+														<MultiBinding StringFormat="{}{0} | {1}">
+															<Binding Path="Name"/>
+															<Binding Path="Number"/>
+														</MultiBinding>
+													</TextBlock.Text>
+												</TextBlock>
+											</DataTemplate>
+										</ComboBox.ItemTemplate>
 
-                                    </ComboBox>
-
-
-                                </Grid>
-                                <Grid Grid.Column="1" Grid.Row="0">
-                                    <TextBlock Margin="5,5,5,5">Parcel id:</TextBlock>
-
-                                </Grid>
-                                <Grid Grid.Column="1" Grid.Row="1">
-                                    <TextBox Height="25" Margin="5,-5,5,2" Text="{Binding ParcelId}">
-
-                                    </TextBox>
-
-                                </Grid>
-
-                            </Grid>
-
-                        </Grid>
-                        <Grid Grid.Column="0" Grid.Row="3" Margin="5,10,5,5">
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="Auto"/>
-                                <RowDefinition Height="Auto"/>
-                            </Grid.RowDefinitions>
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="3*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid Grid.Column="0" Grid.Row="0" Margin="1,3,5,5">
-                                <TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="Full id:"/>
-
-                            </Grid>
-                            <Grid Grid.Column="1" Grid.Row="0" Margin="0,3,5,5">
-                                <TextBlock FontStyle="Italic" HorizontalAlignment="Left" Text="{Binding ParcelIdFull}" Height="14"/>
-
-                            </Grid>
-
-                        </Grid>
-                        <Separator Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
-                        <Grid Grid.Column="0" Grid.Row="4" Margin="5,5,5,5">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <Grid.RowDefinitions>
-                                <RowDefinition Height="*"/>
-                                <RowDefinition Height="*"/>
-                            </Grid.RowDefinitions>
-
-                            <Grid Grid.Column="0" Grid.Row="1">
-                                <Button  HorizontalAlignment="Left" Style="{DynamicResource Esri_Button}" Command="{Binding CmdShowParcelInGeoportal}" IsEnabled="{Binding ShowGeoportalBtnEnabled}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Width="20" Source="pack://application:,,,/ULDKClient;component/Images/geoportal.png" Margin="2" Grid.Column="0" />
-                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="{Binding ShowGeoportalBtnEnabled}">
-                                            <TextBlock Text="Show in Geoportal" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Button>
-
-                            </Grid>
-
-                            <Grid Grid.Column="1" Grid.Row="1">
-                                <Button HorizontalAlignment="Right" Style="{DynamicResource Esri_Button}" Command="{Binding CmdShowParcelOnTheMap}">
-                                    <Grid>
-                                        <Grid.ColumnDefinitions>
-                                            <ColumnDefinition Width="Auto" />
-                                            <ColumnDefinition Width="Auto" />
-                                        </Grid.ColumnDefinitions>
-                                        <Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/DisplayCurrentLocationOnMap32.png" Margin="2" Grid.Column="0" />
-                                        <StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
-                                            <TextBlock Text="Show on the map" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Button>
-
-                            </Grid>
-
-                        </Grid>
-                    </Grid>
+									</ComboBox>
 
 
+								</Grid>
+								<Grid Grid.Column="1" Grid.Row="0">
+									<TextBlock Margin="5,5,5,5">Parcel id:</TextBlock>
 
+								</Grid>
+								<Grid Grid.Column="1" Grid.Row="1">
+									<TextBox Height="25" Margin="5,-5,5,2" Text="{Binding ParcelId}">
 
+									</TextBox>
 
+								</Grid>
 
+							</Grid>
 
+						</Grid>
+						<Grid Grid.Column="0" Grid.Row="3" Margin="5,10,5,5">
+							<Grid.RowDefinitions>
+								<RowDefinition Height="Auto"/>
+								<RowDefinition Height="Auto"/>
+							</Grid.RowDefinitions>
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="3*"/>
+							</Grid.ColumnDefinitions>
+							<Grid Grid.Column="0" Grid.Row="0" Margin="1,3,5,5">
+								<TextBlock HorizontalAlignment="Left" VerticalAlignment="Center" Text="Full id:"/>
+
+							</Grid>
+							<Grid Grid.Column="1" Grid.Row="0" Margin="0,3,5,5">
+								<TextBlock FontStyle="Italic" HorizontalAlignment="Left" Text="{Binding ParcelIdFull}" Height="14"/>
+
+							</Grid>
+
+						</Grid>
+						<Separator Grid.Column="0" HorizontalAlignment="Left" VerticalAlignment="Top"/>
+						<Grid Grid.Column="0" Grid.Row="4" Margin="5,5,5,5">
+							<Grid.ColumnDefinitions>
+								<ColumnDefinition Width="*"/>
+								<ColumnDefinition Width="*"/>
+							</Grid.ColumnDefinitions>
+							<Grid.RowDefinitions>
+								<RowDefinition Height="*"/>
+								<RowDefinition Height="*"/>
+							</Grid.RowDefinitions>
+
+							<Grid Grid.Column="0" Grid.Row="1">
+								<Button  HorizontalAlignment="Left" Style="{DynamicResource Esri_Button}" Command="{Binding CmdShowParcelInGeoportal}" IsEnabled="{Binding ShowGeoportalBtnEnabled}">
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto" />
+											<ColumnDefinition Width="Auto" />
+										</Grid.ColumnDefinitions>
+										<Image Width="20" Source="pack://application:,,,/ULDKClient;component/Images/geoportal.png" Margin="2" Grid.Column="0" />
+										<StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center" IsEnabled="{Binding ShowGeoportalBtnEnabled}">
+											<TextBlock Text="Show in Geoportal" />
+										</StackPanel>
+									</Grid>
+								</Button>
+
+							</Grid>
+
+							<Grid Grid.Column="1" Grid.Row="1">
+								<Button HorizontalAlignment="Right" Style="{DynamicResource Esri_Button}" Command="{Binding CmdShowParcelOnTheMap}">
+									<Grid>
+										<Grid.ColumnDefinitions>
+											<ColumnDefinition Width="Auto" />
+											<ColumnDefinition Width="Auto" />
+										</Grid.ColumnDefinitions>
+										<Image Width="20" Source="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/DisplayCurrentLocationOnMap32.png" Margin="2" Grid.Column="0" />
+										<StackPanel Grid.Column="1" Margin="5" HorizontalAlignment="Center" VerticalAlignment="Center">
+											<TextBlock Text="Show on the map" />
+										</StackPanel>
+									</Grid>
+								</Button>
+
+							</Grid>
+
+						</Grid>
+					</Grid>
 
 
 
@@ -270,19 +268,26 @@
 
 
 
-                </Expander.Content>
 
 
 
 
 
-            </Expander>
 
 
-        </Grid>
+				</Expander.Content>
 
 
 
 
-    </Grid>
+
+			</Expander>
+
+
+		</Grid>
+
+
+
+
+	</Grid>
 </UserControl>
