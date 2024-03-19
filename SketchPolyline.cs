@@ -48,7 +48,7 @@ namespace ULDKClient
                 if (polyline.Length > Constants.POLYLINE_MAX_LENGTH_METERS)
                 {
 
-                    MessageBox.Show(Resource.SKETCH_LINE_LENGTH_OVER_LIMIT);
+                    MessageBox.Show(Properties.Resources.SKETCH_LINE_LENGTH_OVER_LIMIT);
                     log.Information("Line length over the limit.");
                     return true;
                 }

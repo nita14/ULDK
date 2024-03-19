@@ -27,22 +27,13 @@ namespace ULDKClient.Utils
 
 
 
-		/// <summary>
-		/// Checks if the file gdb exists, if not creates it with feature class
-		/// </summary>
-		/// <param name="projectParentFolder"></param>
-		/// <returns></returns>
-		public static Task<bool> CheckOrCreateLocalGDBAsync(string projectParentFolder)
-		{
-			//queued task on MCT
-			return QueuedTask.Run(() =>
-			{
-				return CheckOrCreateLocalGDBAsync(projectParentFolder);
-			});
-		}
-
-		//prefer synchronous api methods
-		public static bool CheckOrCreateLocalGDB(string projectParentFolder)
+        /// <summary>
+        /// Checks if the file gdb exists, if not creates it with feature class
+        /// </summary>
+        /// <param name="projectParentFolder"></param>
+        /// <returns></returns>
+        //prefer synchronous api methods
+        public static bool CheckOrCreateLocalGDB(string projectParentFolder)
 		{
 			string gdbPath = Path.Combine(projectParentFolder, Constants.PROJECT_SUBFOLDER, Constants.GDB_NAME_WITH_EXT);
 			Geodatabase fdgb;

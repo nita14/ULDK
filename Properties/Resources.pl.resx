@@ -135,4 +135,40 @@
   <data name="SKETCH_POLYGON_AREA_OVER_LIMIT" xml:space="preserve">
     <value>Narysuj poligon, którego pole powierzchni jest mniejsze od 1 kilometra kwadratowego (1 km x 1 km). Bądź litościwy dla serwerów ULDK...</value>
   </data>
+  <data name="UI_EX_FIND_BY_FULL_ID" xml:space="preserve">
+    <value>Pełny numer:</value>
+  </data>
+  <data name="UI_EX_FIND_BY_ID" xml:space="preserve">
+    <value>Znajdź działkę według jej pełnego numeru:</value>
+  </data>
+  <data name="UI_EX_FIND_BY_ID_COMMUNE" xml:space="preserve">
+    <value>Wybierz gminę:</value>
+  </data>
+  <data name="UI_EX_FIND_BY_ID_REGION" xml:space="preserve">
+    <value>Wybierz obręb:</value>
+  </data>
+  <data name="UI_EX_FIND_BY_PARCEL_ID" xml:space="preserve">
+    <value>Wpisz numer działki:</value>
+  </data>
+  <data name="UI_EX_FIND_BY_SHOW_GEOPORTAL" xml:space="preserve">
+    <value>Pokaż w Geoportal</value>
+  </data>
+  <data name="UI_EX_FIND_BY_SHOW_MAP" xml:space="preserve">
+    <value>Pokaż na Mapie</value>
+  </data>
+  <data name="UI_EX_FIND_BY_SKETCH" xml:space="preserve">
+    <value>Znajdź działkę rysując szkic na mapie:</value>
+  </data>
+  <data name="UI_EX_FIND_BY_SKETCH_POINT" xml:space="preserve">
+    <value>Punkt</value>
+  </data>
+  <data name="UI_EX_FIND_BY_SKETCH_POLYGON" xml:space="preserve">
+    <value>Poligon</value>
+  </data>
+  <data name="UI_EX_FIND_BY_SKETCH_POLYLINE" xml:space="preserve">
+    <value>Linia</value>
+  </data>
+  <data name="UI_HEADING" xml:space="preserve">
+    <value>Usługa lokalizacji działek ewidencyjnych (ULDK) jest utrzymywana przez GUGiK.</value>
+  </data>
 </root>

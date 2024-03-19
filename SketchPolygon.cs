@@ -47,7 +47,7 @@ namespace ULDKClient
                 if (polygon.Area > Constants.POLYGON_MAX_AREA_SQ_METERS)
                 {
 
-                    MessageBox.Show(Resource.SKETCH_POLYGON_AREA_OVER_LIMIT);
+                    MessageBox.Show(Properties.Resources.SKETCH_POLYGON_AREA_OVER_LIMIT);
                     log.Information("Polygon area over the limit.");
                     return true;
                 }

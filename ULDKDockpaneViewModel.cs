@@ -114,7 +114,7 @@ namespace ULDKClient
 				}
 				catch (Exception ex)
 				{
-					MessageBox.Show(Resource.COMMUNE_REGION_ERROR);
+					MessageBox.Show(Properties.Resources.COMMUNE_REGION_ERROR);
 					Log.Fatal(ex.InnerException.Message);
 					Log.Fatal(ex.StackTrace.ToString());
 					return;
@@ -355,7 +355,7 @@ namespace ULDKClient
 						//parcel with the specified id does not exist
 						if (parcel == null)
 						{
-							MessageBox.Show(Resource.PARCEL_ID_NOT_EXIST_ERROR);
+							MessageBox.Show(Properties.Resources.PARCEL_ID_NOT_EXIST_ERROR);
 							Log.Information("Cannot find parcel with the id: " + ParcelIdFull);
 							return;
 						}
@@ -397,7 +397,7 @@ namespace ULDKClient
 					}
 					else
 					{
-						MessageBox.Show(Resource.ADD_PARCEL_FAILED);
+						MessageBox.Show(Properties.Resources.ADD_PARCEL_FAILED);
 
 
 					}

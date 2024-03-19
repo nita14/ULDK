@@ -12,8 +12,8 @@ C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient_MarkupCom
 C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient_MarkupCompile.lref
 C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKDockpane.baml
 C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient.g.resources
-C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient.Resource.resources
-C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient.Resource.pl.resources
+C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient.Properties.Resources.resources
+C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient.Properties.Resources.pl.resources
 C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient.csproj.GenerateResource.cache
 C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient.GeneratedMSBuildEditorConfig.editorconfig
 C:\Dev\GIS\AddIns312\ULDKClient\obj\Debug\net6.0-windows7.0\ULDKClient.AssemblyInfoInputs.cache

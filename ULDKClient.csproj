@@ -98,25 +98,25 @@
     </Reference>
   </ItemGroup>
   <ItemGroup>
-    <Compile Update="Resource.pl.Designer.cs">
-      <DependentUpon>Resource.pl.resx</DependentUpon>
+    <Compile Update="Properties\Resources.pl.Designer.cs">
+      <DependentUpon>Resources.pl.resx</DependentUpon>
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
     </Compile>
-    <Compile Update="Resource.Designer.cs">
+    <Compile Update="Properties\Resources.Designer.cs">
       <DesignTime>True</DesignTime>
       <AutoGen>True</AutoGen>
-      <DependentUpon>Resource.resx</DependentUpon>
+      <DependentUpon>Resources.resx</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Update="Resource.pl.resx">
-      <LastGenOutput>Resource.pl.Designer.cs</LastGenOutput>
-      <Generator>ResXFileCodeGenerator</Generator>
+    <EmbeddedResource Update="Properties\Resources.pl.resx">
+      <LastGenOutput>Resources.pl.Designer.cs</LastGenOutput>
+      <Generator>PublicResXFileCodeGenerator</Generator>
     </EmbeddedResource>
-    <EmbeddedResource Update="Resource.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resource.Designer.cs</LastGenOutput>
+    <EmbeddedResource Update="Properties\Resources.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="C:\Program Files\ArcGIS\Pro\bin\Esri.ProApp.SDK.Desktop.targets" Condition="Exists('C:\Program Files\ArcGIS\Pro\bin\Esri.ProApp.SDK.Desktop.targets') AND !Exists('Esri.ArcGISPro.Extensions.targets')" />
