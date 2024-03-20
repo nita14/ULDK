@@ -72,7 +72,7 @@ namespace ULDKClient {
                 return;
             }
             _contentLoaded = true;
-            System.Uri resourceLocater = new System.Uri("/ULDKClient;component/uldkdockpane.xaml", System.UriKind.Relative);
+            System.Uri resourceLocater = new System.Uri("/ULDKClient;V1.0.0.0;component/uldkdockpane.xaml", System.UriKind.Relative);
             
             #line 1 "..\..\..\ULDKDockpane.xaml"
             System.Windows.Application.LoadComponent(this, resourceLocater);

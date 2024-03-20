@@ -19,6 +19,7 @@
         public static string GEOPORTAL_LOCATE_PARCEL_URL = @"https://mapy.geoportal.gov.pl/imap/?identifyParcel=";
         public static string STATUS_PROCES_FREE = @"Status: free";
         public static string STATUS_PROCES_BUSY = @"Status: processing";
+        public static string KIEG_WMS_URL = @"https://integracja.gugik.gov.pl/cgi-bin/KrajowaIntegracjaEwidencjiGruntow";
 
 
 
