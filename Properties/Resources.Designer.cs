@@ -115,6 +115,15 @@ namespace ULDKClient.Properties {
         }
         
         /// <summary>
+        ///   Looks up a localized string similar to Status:.
+        /// </summary>
+        public static string UI_CURSOR_STATUS {
+            get {
+                return ResourceManager.GetString("UI_CURSOR_STATUS", resourceCulture);
+            }
+        }
+        
+        /// <summary>
         ///   Looks up a localized string similar to Full id:.
         /// </summary>
         public static string UI_EX_FIND_BY_FULL_ID {
@@ -187,7 +196,7 @@ namespace ULDKClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Point.
+        ///   Looks up a localized string similar to Point    .
         /// </summary>
         public static string UI_EX_FIND_BY_SKETCH_POINT {
             get {

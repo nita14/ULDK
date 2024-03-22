@@ -3,36 +3,12 @@
   "WorkspaceRootPath": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\config.daml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:config.daml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\config.pl.daml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:config.pl.daml||{FA3CD31E-987B-443A-9B81-186104E8DAC1}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\addkiegwmstomap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:addkiegwmstomap.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\utils\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:utils\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\utils\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:utils\\helpers.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\uldkdockpane.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:uldkdockpane.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\uldkdockpaneviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:uldkdockpaneviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\utils\\getremotedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:utils\\getremotedata.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\uldkdockpane.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:uldkdockpane.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|C:\\Dev\\GIS\\AddIns312\\ULDKClient\\properties\\resources.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}",
@@ -43,8 +19,8 @@
       "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:properties\\resources.pl.resx||{FF4D6ACA-9352-4A5F-821E-F4D6EBDCAB11}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|C:\\Dev\\GIS\\AddIns312\\ULDKClient\\obj\\Debug\\net6.0-windows7.0\\ULDKDockpane.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{A2FE74E1-B743-11D0-AE1A-00A0C90FFFC3}|\u003CMiscFiles\u003E|solutionrelative:obj\\Debug\\net6.0-windows7.0\\ULDKDockpane.g.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|c:\\dev\\gis\\addins312\\uldkclient\\utils\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{A551769E-593D-4056-A98D-18F87888F730}|ULDKClient.csproj|solutionrelative:utils\\constants.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
   "DocumentGroupContainers": [
@@ -63,102 +39,30 @@
             {
               "$type": "Document",
               "DocumentIndex": 1,
-              "Title": "Config.pl.daml",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Config.pl.daml",
-              "RelativeDocumentMoniker": "Config.pl.daml",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Config.pl.daml",
-              "RelativeToolTip": "Config.pl.daml",
-              "ViewState": "AQIAAB0AAAAAAAAAAAAAACoAAADtAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-03-20T19:15:53.918Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
-              "Title": "Config.daml",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Config.daml",
-              "RelativeDocumentMoniker": "Config.daml",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Config.daml",
-              "RelativeToolTip": "Config.daml",
-              "ViewState": "AQIAADYAAAAAAAAAAAAAACUAAAAqAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001001|",
-              "WhenOpened": "2024-03-20T19:15:17.326Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 3,
-              "Title": "Constants.cs",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Constants.cs",
-              "RelativeDocumentMoniker": "Utils\\Constants.cs",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Constants.cs",
-              "RelativeToolTip": "Utils\\Constants.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAB3AAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-20T19:06:35.391Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 2,
-              "Title": "AddKIEGWMSToMap.cs",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\AddKIEGWMSToMap.cs",
-              "RelativeDocumentMoniker": "AddKIEGWMSToMap.cs",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\AddKIEGWMSToMap.cs",
-              "RelativeToolTip": "AddKIEGWMSToMap.cs",
-              "ViewState": "AQIAAAAAAAAAAAAAAAAAAAAAAAAWAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-20T18:55:18.339Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "Helpers.cs",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Helpers.cs",
-              "RelativeDocumentMoniker": "Utils\\Helpers.cs",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Helpers.cs",
-              "RelativeToolTip": "Utils\\Helpers.cs",
-              "ViewState": "AQIAAC8BAAAAAAAAAAAewEUBAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-19T20:31:31.334Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
               "Title": "ULDKDockpaneViewModel.cs",
               "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpaneViewModel.cs",
               "RelativeDocumentMoniker": "ULDKDockpaneViewModel.cs",
               "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpaneViewModel.cs",
               "RelativeToolTip": "ULDKDockpaneViewModel.cs",
-              "ViewState": "AQIAAFQAAAAAAAAAAAAAAGUAAAAjAAAA",
+              "ViewState": "AQIAANsBAAAAAAAAAAAAwNwBAAAAAAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2024-03-19T20:31:00.911Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "GetRemoteData.cs",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\GetRemoteData.cs",
-              "RelativeDocumentMoniker": "Utils\\GetRemoteData.cs",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\GetRemoteData.cs",
-              "RelativeToolTip": "Utils\\GetRemoteData.cs",
-              "ViewState": "AQIAAIwAAAAAAAAAAAAAAAAAAAAAAAAA",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-19T20:30:42.97Z"
+              "DocumentIndex": 0,
+              "Title": "ULDKDockpane.xaml",
+              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpane.xaml",
+              "RelativeDocumentMoniker": "ULDKDockpane.xaml",
+              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpane.xaml",
+              "RelativeToolTip": "ULDKDockpane.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2024-03-22T15:30:35.624Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
-              "Title": "Resources.pl.resx",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Properties\\Resources.pl.resx",
-              "RelativeDocumentMoniker": "Properties\\Resources.pl.resx",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Properties\\Resources.pl.resx",
-              "RelativeToolTip": "Properties\\Resources.pl.resx",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
-              "WhenOpened": "2024-03-19T20:09:48.444Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 2,
               "Title": "Resources.resx",
               "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Properties\\Resources.resx",
               "RelativeDocumentMoniker": "Properties\\Resources.resx",
@@ -169,26 +73,26 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "ULDKDockpane.xaml",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpane.xaml",
-              "RelativeDocumentMoniker": "ULDKDockpane.xaml",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\ULDKDockpane.xaml",
-              "RelativeToolTip": "ULDKDockpane.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2024-03-19T20:04:21.047Z"
+              "DocumentIndex": 3,
+              "Title": "Resources.pl.resx",
+              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Properties\\Resources.pl.resx",
+              "RelativeDocumentMoniker": "Properties\\Resources.pl.resx",
+              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Properties\\Resources.pl.resx",
+              "RelativeToolTip": "Properties\\Resources.pl.resx",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.001005|",
+              "WhenOpened": "2024-03-19T20:09:48.444Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "ULDKDockpane.g.cs",
-              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\obj\\Debug\\net6.0-windows7.0\\ULDKDockpane.g.cs",
-              "RelativeDocumentMoniker": "obj\\Debug\\net6.0-windows7.0\\ULDKDockpane.g.cs",
-              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\obj\\Debug\\net6.0-windows7.0\\ULDKDockpane.g.cs",
-              "RelativeToolTip": "obj\\Debug\\net6.0-windows7.0\\ULDKDockpane.g.cs",
-              "ViewState": "AQIAAC4AAAAAAAAAAAAwwD4AAAAVAAAA",
+              "DocumentIndex": 4,
+              "Title": "Constants.cs",
+              "DocumentMoniker": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Constants.cs",
+              "RelativeDocumentMoniker": "Utils\\Constants.cs",
+              "ToolTip": "C:\\Dev\\GIS\\AddIns312\\ULDKClient\\Utils\\Constants.cs",
+              "RelativeToolTip": "Utils\\Constants.cs",
+              "ViewState": "AQIAAAAAAAAAAAAAAAAAABUAAAB3AAAA",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2024-03-19T19:39:13.023Z"
+              "WhenOpened": "2024-03-20T19:06:35.391Z"
             }
           ]
         }

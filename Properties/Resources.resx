@@ -135,6 +135,9 @@
   <data name="SKETCH_POLYGON_AREA_OVER_LIMIT" xml:space="preserve">
     <value>Please draw a polygon whose area is less than 1 square kilometer (1 km x1 km). Trying to be graceful to ULDK servers...</value>
   </data>
+  <data name="UI_CURSOR_STATUS" xml:space="preserve">
+    <value>Status:</value>
+  </data>
   <data name="UI_EX_FIND_BY_FULL_ID" xml:space="preserve">
     <value>Full id:</value>
   </data>
@@ -160,7 +163,7 @@
     <value>Find a parcel by drawing a shape:</value>
   </data>
   <data name="UI_EX_FIND_BY_SKETCH_POINT" xml:space="preserve">
-    <value>Point</value>
+    <value>Point    </value>
   </data>
   <data name="UI_EX_FIND_BY_SKETCH_POLYGON" xml:space="preserve">
     <value>Polygon</value>

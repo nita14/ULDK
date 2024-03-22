@@ -6,6 +6,7 @@ using ArcGIS.Desktop.Mapping;
 using Serilog;
 using System;
 using System.Threading.Tasks;
+using System.Windows;
 using ULDKClient.Utils;
 
 namespace ULDKClient
@@ -33,7 +34,14 @@ namespace ULDKClient
 		{
 			return QueuedTask.Run(async () =>
 			{
+
+                DockPane pane = FrameworkApplication.DockPaneManager.Find("ULDKClient_ULDKDockpane");
+				(pane as ULDKDockpaneViewModel).BusyVisibility = Visibility.Visible;
+
+				
+                //ULDKDockpaneViewModel._busyVisibility = Visibility.Visible;
 				MapPoint point = geometry as MapPoint;
+
 
 				//check the spatial reference
 				if (point.SpatialReference.Wkid != Constants.SPATIAL_REF_2180_WKID)
@@ -72,7 +80,8 @@ namespace ULDKClient
 				}
 
 				await ULDKDockpaneViewModel._mapView.ZoomToAsync(parcel.Geom, TimeSpan.FromSeconds(1));
-				return true;
+                (pane as ULDKDockpaneViewModel).BusyVisibility = Visibility.Collapsed;
+                return true;
 
 
 			});

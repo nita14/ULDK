@@ -1,12 +1,13 @@
 ﻿using ArcGIS.Core.Geometry;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
-using ArcGIS.Desktop.Framework.Dialogs;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
 using ArcGIS.Desktop.Mapping;
 using Serilog;
 using System.Threading.Tasks;
+using System.Windows;
 using ULDKClient.Utils;
+using MessageBox = ArcGIS.Desktop.Framework.Dialogs.MessageBox;
 
 namespace ULDKClient
 {
@@ -35,6 +36,10 @@ namespace ULDKClient
 
             return QueuedTask.Run(async () =>
             {
+
+                DockPane pane = FrameworkApplication.DockPaneManager.Find("ULDKClient_ULDKDockpane");
+                (pane as ULDKDockpaneViewModel).BusyVisibility = Visibility.Visible;
+
                 Polygon polygon = geometry as Polygon;
 
                 //check the wkid
@@ -56,6 +61,7 @@ namespace ULDKClient
                 bool isPolygoneadded = await Helpers.AddSketchToGraphicLayerAsync(polygon);
 
                 await Helpers.ProcessPolygonFromSketchAsync(polygon);
+                (pane as ULDKDockpaneViewModel).BusyVisibility = Visibility.Collapsed;
                 return true;
 
             });
