@@ -6,7 +6,7 @@
     <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
     <Company>Private</Company>
     <Date>24/03/2024</Date>
-    <Subject>GUGIK Client</Subject>
+    <Subject>GUGiK/ULDK Client</Subject>
   </AddInInfo>
   <modules>
     <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1">

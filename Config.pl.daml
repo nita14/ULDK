@@ -2,11 +2,11 @@
   <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.2.49743">
     <Name>GUGiK Client</Name>
     <Description>ArcGIS Pro Add-in to consume GUGIK services and APIs.</Description>
-    <Image>pack://application:,,,/ULDKClient;component/Images/geoportal.png</Image>
+    <Image>Images\ULDK.png</Image>
     <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
     <Company>Private</Company>
     <Date>24/03/2024</Date>
-    <Subject>GUGIiK Client</Subject>
+    <Subject>GUGiK/ULDK Client</Subject>
   </AddInInfo>
   <modules>
     <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1">
