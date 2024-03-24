@@ -57,7 +57,7 @@ namespace ULDKClient
                     return true;
                 }
 
-                //add point to the map
+                //add polygon to the map
                 bool isPolygoneadded = await Helpers.AddSketchToGraphicLayerAsync(polygon);
 
                 await Helpers.ProcessPolygonFromSketchAsync(polygon);

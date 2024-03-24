@@ -2,7 +2,7 @@
 {
 
     /// <summary>
-    /// Region class for Polish TERC data (level - obreby)
+    /// Region class for Polish TERC data (level - region/obreby)
     /// </summary>
     public class Region
     {

@@ -10,11 +10,9 @@ using ArcGIS.Desktop.Mapping;
 using Serilog;
 using System;
 using System.Collections.Generic;
-using System.Globalization;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
-using System.Windows.Media;
 using FieldDescription = ArcGIS.Core.Data.DDL.FieldDescription;
 using Geometry = ArcGIS.Core.Geometry.Geometry;
 
@@ -22,10 +20,6 @@ namespace ULDKClient.Utils
 {
 	public class Helpers
 	{
-
-		private static readonly ILogger log = Log.ForContext<Helpers>();
-
-
 
         /// <summary>
         /// Checks if the file gdb exists, if not creates it with feature class
@@ -36,14 +30,12 @@ namespace ULDKClient.Utils
         public static bool CheckOrCreateLocalGDB(string projectParentFolder)
 		{
 			string gdbPath = Path.Combine(projectParentFolder, Constants.PROJECT_SUBFOLDER, Constants.GDB_NAME_WITH_EXT);
-			Geodatabase fdgb;
-
-
-			//check if gdb exists
-			if (Directory.Exists(gdbPath))
+			Geodatabase fgdb;
+            //check if gdb exists
+            if (Directory.Exists(gdbPath))
 			{
 				Log.Information("File GDB already exists.");
-				fdgb = new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
+				fgdb = new Geodatabase(new FileGeodatabaseConnectionPath(new System.Uri(gdbPath)));
 
 				//checking if the fc is there
 				bool fcExists = CheckLocalFC(projectParentFolder);
@@ -64,7 +56,7 @@ namespace ULDKClient.Utils
 				try
 				{
 					//creating gdb
-					using (fdgb = SchemaBuilder.CreateGeodatabase(fileGdbConnectionPath))
+					using (fgdb = SchemaBuilder.CreateGeodatabase(fileGdbConnectionPath))
 					{
 						//create fc
 						return CreateResultsFeatureClass(gdbPath, Constants.FC_RESULTS_NAME);
@@ -149,7 +141,7 @@ namespace ULDKClient.Utils
 					},
 			new ShapeDescription(GeometryType.Polygon, new SpatialReferenceBuilder(2180).ToSpatialReference()));
 
-			FeatureClassToken featureClassToken = schemaBuilder.Create(featureClassDescription);
+			schemaBuilder.Create(featureClassDescription);
 
 			// Build status
 			bool buildStatus = schemaBuilder.Build();
@@ -261,7 +253,11 @@ namespace ULDKClient.Utils
 					});
 
 		}
-
+		/// <summary>
+		/// Process a sketched polyline
+		/// </summary>
+		/// <param name="polyline"></param>
+		/// <returns></returns>
 		public static Task<bool> ProcessPolylineFromSketchAsync(Polyline polyline)
 		{
 
@@ -270,18 +266,19 @@ namespace ULDKClient.Utils
 				// 1. Densify the line
 				Polyline polyDensified = GeometryEngine.Instance.DensifyByLength(polyline, 1) as Polyline;
 
-				// 2. Get first vertex and fetch parcel and iterate
+				// 2. Get first vertex, fetch parcel and iterate
 				while (polyDensified.Points.Count > 0)
 				{
 					MapPoint mp = polyDensified.Points[0];
 					Parcel parcel = await GetRemoteData.GetInstance().GetParcelByPointAsync(mp);
+					if (parcel == null) return false;
 					// 3. Add pacel to map, gl and fc
-					bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(ULDKDockpaneViewModel._graphicsLayer, parcel.Geom, parcel.Id);
-					bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, ULDKDockpaneViewModel._projectParentFolder);
+					bool isGraphicadded = await AddGeometrytoGraphicLayerAsync(ULDKDockpaneViewModel._graphicsLayer, parcel.Geom, parcel.Id);
+					bool isFeatureAdded = await AddParceltoFeatureClassAsync(parcel, ULDKDockpaneViewModel._projectParentFolder);
 
 					// 4. Bufer the parcel geom by 50cm
 					Polygon parcelGeomBuffer = GeometryEngine.Instance.Buffer(parcel.Geom, 0.50) as Polygon;
-					// 5. Perform difference densyfied line and parcel geom
+					// 5. Perform difference densyfied line and parcel geometry
 					Polyline polyDensifiedNew = GeometryEngine.Instance.Difference(polyDensified, parcelGeomBuffer) as Polyline;
 					polyDensified = polyDensifiedNew;
 				}
@@ -290,7 +287,11 @@ namespace ULDKClient.Utils
 			});
 		}
 
-
+		/// <summary>
+		/// Process a sketched polygon
+		/// </summary>
+		/// <param name="polygon"></param>
+		/// <returns></returns>
 		public static Task<bool> ProcessPolygonFromSketchAsync(Polygon polygon)
 		{
 
@@ -310,17 +311,19 @@ namespace ULDKClient.Utils
 				//3. Intesection (GE) Geometry Sketch and All Points as Multipoint 
 				Multipoint fishnetCropped = GeometryEngine.Instance.Intersection(fishnetMp, polygon) as Multipoint;
 
-				//4. Take first point in the fishnet and process the extent
+				//4. Take first point in the fishnet and process
 				while (fishnetCropped.PointCount > 0)
 				{
+					//Get parcel
 					Parcel parcel = await GetRemoteData.GetInstance().GetParcelByPointAsync(fishnetCropped.Points[0]);
-					// 3. Add pacel to map, gl and fc
-					bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(ULDKDockpaneViewModel._graphicsLayer, parcel.Geom, parcel.Id);
-					bool isFeatureAdded = await Helpers.AddParceltoFeatureClassAsync(parcel, ULDKDockpaneViewModel._projectParentFolder);
+                    if (parcel == null) return false;
+                    //Add pacel to map, gl and fc
+                    bool isGraphicadded = await AddGeometrytoGraphicLayerAsync(ULDKDockpaneViewModel._graphicsLayer, parcel.Geom, parcel.Id);
+					bool isFeatureAdded = await AddParceltoFeatureClassAsync(parcel, ULDKDockpaneViewModel._projectParentFolder);
 
-					// 4. Bufer the parcel geom by 50cm
+					//Buffer the parcel geom by 50cm
 					Polygon parcelGeomBuffer = GeometryEngine.Instance.Buffer(parcel.Geom, 0.50) as Polygon;
-					// 5. Perform difference densyfied line and parcel geom
+					//Perform difference fishnet and parcel geom
 					Multipoint fishnetCroppedNew = GeometryEngine.Instance.Difference(fishnetCropped, parcelGeomBuffer) as Multipoint;
 					fishnetCropped = fishnetCroppedNew;
 
@@ -332,7 +335,14 @@ namespace ULDKClient.Utils
 		}
 
 
-
+		/// <summary>
+		/// Create a fishnet from the envelope
+		/// </summary>
+		/// <param name="polyExtentXMin"></param>
+		/// <param name="polyExtentYMin"></param>
+		/// <param name="polyExtentXMax"></param>
+		/// <param name="polyExtentYMax"></param>
+		/// <returns></returns>
 		public static async Task<Multipoint> CreateFishnetMultiPointFromExtent(double polyExtentXMin, double polyExtentYMin, double polyExtentXMax, double polyExtentYMax)
 		{
 
@@ -374,8 +384,6 @@ namespace ULDKClient.Utils
 			}
 
 			fishnetMp = MultipointBuilderEx.CreateMultipoint(points, ULDKDockpaneViewModel._sp2180);
-
-
 			return fishnetMp;
 
 

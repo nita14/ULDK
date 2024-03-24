@@ -28,7 +28,6 @@ namespace ULDKClient
                 else
                 {
                     //add it to the map
-
                     CIMInternetServerConnection serverConnection = new CIMInternetServerConnection { URL = Utils.Constants.KIEG_WMS_URL };
                     CIMWMSServiceConnection connection = new CIMWMSServiceConnection { ServerConnection = serverConnection };
                     LayerCreationParams layerParams = new LayerCreationParams(connection);

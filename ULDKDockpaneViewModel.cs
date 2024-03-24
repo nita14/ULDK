@@ -67,7 +67,6 @@ namespace ULDKClient
                         Log.Information("Communes downloaded: {0}.", communes.Count());
                         if (communes.Count() > 0)
                         {
-                            //now populate the observable collection with a lock
                             lock (Module1._Lock)
                             {
                                 _communes.Clear();
@@ -87,7 +86,6 @@ namespace ULDKClient
                         Log.Information("Communes downloaded: {0}.", regions.Count());
                         if (regions.Count() > 0)
                         {
-                            //now populate the observable collection with a lock
                             lock (Module1._Lock)
                             {
                                 _regions.Clear();
@@ -138,7 +136,7 @@ namespace ULDKClient
         /// </summary>
         protected override void OnHelpRequested()
         {
-            var startInfo = new System.Diagnostics.ProcessStartInfo(@"https://github.com/nita14/ULDK#readme");
+            var startInfo = new System.Diagnostics.ProcessStartInfo(Constants.REPO_URL);
             startInfo.UseShellExecute = true;
             System.Diagnostics.Process.Start(startInfo);
         }
@@ -172,7 +170,7 @@ namespace ULDKClient
             var detector = new Utils.LogErrorDetector();
 
             //check or create an ULDK directory
-            System.IO.Directory.CreateDirectory(Path.Join(projectParentFolder, Constants.PROJECT_SUBFOLDER));
+            Directory.CreateDirectory(Path.Join(projectParentFolder, Constants.PROJECT_SUBFOLDER));
 
             Log.Logger = new LoggerConfiguration()
             .MinimumLevel.Debug()
@@ -202,15 +200,6 @@ namespace ULDKClient
             set => SetProperty(ref _parcelIdFull, value);
         }
 
-        private string _statusProcessingSketch = Constants.STATUS_PROCES_FREE;
-        public string StatusProcessingSketch
-        {
-            get => _statusProcessingSketch;
-            set => SetProperty(ref _statusProcessingSketch, value);
-        }
-
-
-
         private string _parcelId = "";
         public string ParcelId
         {
@@ -235,21 +224,14 @@ namespace ULDKClient
 
             }
         }
-        /// <summary>
-        /// Sketch reference
-        /// </summary>
-        /// 
 
         //Region dropdwon handlers
 
-        //Once it is bound do not re-set the pointer or u break the
-        //binding
         private ObservableCollection<Region> _regions = new ObservableCollection<Region>();
         public ObservableCollection<Region> Regions
         {
 
             get => _regions;
-            //set => SetProperty(ref _regions, value, () => Regions);
         }
 
 
@@ -300,7 +282,6 @@ namespace ULDKClient
         {
 
             get => _communes;
-            //set => SetProperty(ref _communes, value, () => Communes);
         }
 
         private Commune _selectedCommune;
@@ -319,9 +300,8 @@ namespace ULDKClient
                     ParcelId = "";
                     ZoomToTercExtentAsync(ParcelIdFull, "Commune");
                     //Update list of regions based on commune id
-
                     CollectionView regionsOriginalView = (CollectionView)CollectionViewSource.GetDefaultView(Regions);
-                    regionsOriginalView.SortDescriptions.Add(new System.ComponentModel.SortDescription(nameof(Region.Number), ListSortDirection.Ascending));
+                    regionsOriginalView.SortDescriptions.Add(new SortDescription(nameof(Region.Number), ListSortDirection.Ascending));
 
                     regionsOriginalView.Filter = r =>
                     {
@@ -330,9 +310,6 @@ namespace ULDKClient
                         return (vRegion != null && vRegion.CommuneId == ParcelIdFull);
 
                     };
-                    int cnt = regionsOriginalView.Count;
-
-
                 }
             }
         }
@@ -472,9 +449,6 @@ namespace ULDKClient
         }
 
     }
-
-
-
 
     /// <summary>
     /// Button implementation to show the DockPane.

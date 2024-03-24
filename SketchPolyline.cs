@@ -57,9 +57,8 @@ namespace ULDKClient
                     return true;
                 }
 
-                //add point to the map
+                //add polygon to the map
                 bool isPolylineadded = await Helpers.AddSketchToGraphicLayerAsync(polyline);
-
                 await Helpers.ProcessPolylineFromSketchAsync(polyline);
                 (pane as ULDKDockpaneViewModel).BusyVisibility = Visibility.Collapsed;
 

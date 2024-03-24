@@ -11,13 +11,15 @@
   <ItemGroup>
     <None Remove="Config.pl.daml" />
     <None Remove="Images\geoportal.png" />
+    <None Remove="Images\ULDK.png" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Config.pl.daml" />
     <Content Include="Config.daml" />
-    <Resource Include="Images\geoportal.png">
+    <Content Include="Images\geoportal.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    </Content>
+    <Content Include="Images\ULDK.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />

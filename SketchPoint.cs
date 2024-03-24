@@ -38,8 +38,6 @@ namespace ULDKClient
                 DockPane pane = FrameworkApplication.DockPaneManager.Find("ULDKClient_ULDKDockpane");
 				(pane as ULDKDockpaneViewModel).BusyVisibility = Visibility.Visible;
 
-				
-                //ULDKDockpaneViewModel._busyVisibility = Visibility.Visible;
 				MapPoint point = geometry as MapPoint;
 
 

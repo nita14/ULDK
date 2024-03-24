@@ -17,9 +17,8 @@
         public static int POLYLINE_MAX_LENGTH_METERS = 1000;
         public static int POLYGON_MAX_AREA_SQ_METERS = 1000000;
         public static string GEOPORTAL_LOCATE_PARCEL_URL = @"https://mapy.geoportal.gov.pl/imap/?identifyParcel=";
-        public static string STATUS_PROCES_FREE = @"Status: free";
-        public static string STATUS_PROCES_BUSY = @"Status: processing";
         public static string KIEG_WMS_URL = @"https://integracja.gugik.gov.pl/cgi-bin/KrajowaIntegracjaEwidencjiGruntow";
+        public static string REPO_URL = @"https://github.com/nita14/ULDK#readme";
 
 
 

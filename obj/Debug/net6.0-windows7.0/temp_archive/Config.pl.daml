@@ -2,19 +2,17 @@
   <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.2.49743">
     <Name>GUGiK Client</Name>
     <Description>ArcGIS Pro Add-in to consume GUGIK services and APIs.</Description>
-    <Image>Images\AddinDesktop32.png</Image>
+    <Image>pack://application:,,,/ULDKClient;component/Images/geoportal.png</Image>
     <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
     <Company>Private</Company>
-    <Date>15/03/2024</Date>
+    <Date>24/03/2024</Date>
     <Subject>GUGIiK Client</Subject>
-    <!-- Note subject can be one or more of these topics:
-                    Content, Framework, Editing, Geodatabase, Geometry, Geoprocessing, Layouts, Map Authoring, Map Exploration -->
   </AddInInfo>
   <modules>
     <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1">
       <!-- uncomment to have the control hosted on a separate tab-->
       <tabs>
-        <tab id="ULDKClient_Tab1" caption="GUGIK" keytip="Pokaż panel GUGiK">
+        <tab id="ULDKClient_Tab1" caption="GUGiK" keytip="Pokaż panel GUGiK">
           <group refID="ULDKClient_Group1" />
           <group refID="ULDKClient_GroupSketch" />
           <group refID="ULDKClient_WMS" />
