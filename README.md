@@ -37,5 +37,8 @@ First, check the logs created in _<project_path>/GUGIK_ folder. Logs are created
 1) Add a new issue in the repo.
 2) Send me an e-mail (adamnicinski[@]hotmail.com) with the description and zipped logs (as discribed above).
 
+## Version history
+
+- v. 1.0.0 - Initial release. ArcGIS Pro 3.2. March 2024.
 
 
