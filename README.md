@@ -32,7 +32,7 @@ The add-in is to add a land parcel as a graphic (shape and its id as text) and s
 4) Newtonsoft.Json (13.0.1)
 
 ## Bugs/enhancements
-First, check the logs created in _<project_path>/GUGIK_ folder. Logs are created with the following convention name: _ULDK_log_yyyy-MM-dd-T-HH-mm-ss_.
+First, check the logs created in _<project_path>/GUGIK_ folder. Logs are created with the following naming convention: _ULDK_log_yyyy-MM-dd-T-HH-mm-ss_.
 
 1) Add a new issue in the repo.
 2) Send me an e-mail (adamnicinski[@]hotmail.com) with the description and zipped logs (as discribed above).
