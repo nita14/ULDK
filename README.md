@@ -11,7 +11,7 @@ ArcGIS Pro Add-in to consume [ULDK API](https://uldk.gugik.gov.pl/?lang=en) (lan
 
 ## How to use ULDK Client?
 
-1. Dowload the add-in. Check last release on Github.com
+1. Dowload the add-in. Check last release on [Github.com](https://github.com/nita14/ULDK)
 2. Install add-in.
 3. Open any ArcGIS Pro project (.aprx).
 4. In the _Ribbon bar_ click on the _GUGiK_ tab.
