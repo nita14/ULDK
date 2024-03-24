@@ -3,7 +3,7 @@
 ArcGIS Pro Add-in to consume [ULDK API](https://uldk.gugik.gov.pl/?lang=en) (land parcel location service) which allows to identify and download land parcel data in Poland (for majority of counties). Service provided by GUGiK uder the CC BY 4.0 license.
 
 ## Requirements
-- ArcGIS Pro Basic v. 3.2. License Basic or higher.
+- ArcGIS Pro Basic v. 3.2. License: Basic or higher.
 - Access to the Internet. Whitelisted URLs:
   1. *.github.com
   2. *.uldk.gugik.gov.pl
