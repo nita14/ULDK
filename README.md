@@ -39,6 +39,6 @@ First, check the logs created in _<project_path>/GUGIK_ folder. Logs are created
 
 ## Version history
 
-- v. 1.0.0 - Initial release. ArcGIS Pro 3.2. March 2024.
+- v. 1.0.0 - Initial release. ArcGIS Pro 3.2. March 2024. [Link](https://github.com/nita14/ULDK/releases/download/v1.0.0/ULDKClient.esriAddinX) 
 
 
