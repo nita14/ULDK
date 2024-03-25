@@ -16,10 +16,10 @@
   <ItemGroup>
     <Content Include="Config.pl.daml" />
     <Content Include="Config.daml" />
-    <Content Include="Images\geoportal.png">
+    <Resource Include="Images\geoportal.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Content>
-    <Content Include="Images\ULDK.png" />
+    </Resource>
+    <Resource Include="Images\ULDK.png" />
   </ItemGroup>
   <ItemGroup>
     <PackageReference Include="DotNetKit.Wpf.AutoCompleteComboBox" Version="1.6.0" />
@@ -120,6 +120,9 @@
       <Generator>PublicResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include="Docs\" />
   </ItemGroup>
   <Import Project="C:\Program Files\ArcGIS\Pro\bin\Esri.ProApp.SDK.Desktop.targets" Condition="Exists('C:\Program Files\ArcGIS\Pro\bin\Esri.ProApp.SDK.Desktop.targets') AND !Exists('Esri.ArcGISPro.Extensions.targets')" />
 </Project>

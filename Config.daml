@@ -1,5 +1,5 @@
 ﻿<ArcGIS defaultAssembly="ULDKClient.dll" defaultNamespace="ULDKClient" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
-  <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.1.41833">
+  <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.2.49743">
     <Name>ULDK Client</Name>
     <Description>ArcGIS Pro Add-in to consume GUGiK services and APIs.</Description>
     <Image>Images\ULDK.png</Image>
@@ -9,11 +9,11 @@
     <Subject>GUGiK/ULDK Client</Subject>
   </AddInInfo>
   <modules>
-    <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1">
+    <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1" >
       <tabs>
-        <tab id="ULDKClient_Tab1" caption="GUGiK" keytip="Shows GUGiK pane">
+        <tab id="ULDKClient_Tab1" caption="GUGiK" keytip="Shows GUGiK pane" condition="esri_mapping_mapPane">
           <group refID="ULDKClient_Group1" />
-          <group refID="ULDKClient_GroupSketch" />
+          <group refID="ULDKClient_GroupSketch" /> 
           <group refID="ULDKClient_WMS" />
         </tab>
       </tabs>
@@ -37,10 +37,10 @@
       </groups>
       <controls>
         <!-- add your controls here -->
-        <button id="ULDKClient_ULDKDockpane_ShowButton" caption="Show ULDK Dockpane" className="ULDKDockpane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EvaluateFeatures32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EvaluateFeatures32.png">
+        <button id="ULDKClient_ULDKDockpane_ShowButton" caption="Show ULDK Dockpane" className="ULDKDockpane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EvaluateFeatures32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EvaluateFeatures32.png" condition="esri_mapping_mapPane">
           <tooltip heading="ULDK dockpane">Activates a dockpane with Parcel Locator Service (ULDK).<disabledText /></tooltip>
         </button>
-        <tool id="ULDKClient_SketchPoint" caption="Draw a Point" className="SketchPoint" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" condition="esri_mapping_mapPane">
+        <tool id="ULDKClient_SketchPoint" caption="Draw a Point" className="SketchPoint" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" condition="esri_mapping_mapPane" >
           <tooltip heading="Draw a Point">
             Click to draw a point on the map<disabledText /></tooltip>
         </tool>
@@ -50,14 +50,14 @@
         <tool id="ULDKClient_SketchPolygon" caption="Draw a polygon" className="SketchPolygon" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/ElementPolygon32.png" condition="esri_mapping_mapPane">
           <tooltip heading="Draw a polygon">Click to draw a polygon on the map<disabledText /></tooltip>
         </tool>
-        <button id="ULDKClient_AddKIEGWMSToMap" caption="Add/Remove KIEG" className="AddKIEGWMSToMap" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/LayerTopology32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/LayerTopology32.png">
+        <button id="ULDKClient_AddKIEGWMSToMap" caption="Add/Remove KIEG" className="AddKIEGWMSToMap" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/LayerTopology32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/LayerTopology32.png" condition="esri_mapping_mapPane">
           <tooltip heading="Add/Remove KIEG">
             Adds KIEG WMS to the active map<disabledText />
           </tooltip>
         </button>
       </controls>
       <dockPanes>
-        <dockPane id="ULDKClient_ULDKDockpane" caption="Parcel Locator Service (ULDK)" className="ULDKDockpaneViewModel" dock="group" dockWith="esri_core_projectDockPane" hasHelp="true">
+        <dockPane id="ULDKClient_ULDKDockpane" caption="Parcel Locator Service (ULDK)" className="ULDKDockpaneViewModel" dock="group" dockWith="esri_core_projectDockPane" hasHelp="true" condition="esri_mapping_mapPane">
           <content className="ULDKDockpaneView" />
         </dockPane>
       </dockPanes>

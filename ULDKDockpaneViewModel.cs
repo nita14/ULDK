@@ -56,43 +56,50 @@ namespace ULDKClient
                 Log.Information("Getting dictionary data from a remote URL and setting the local db...");
                 try
                 {
-                    //getting communes - use a local list
-                    var communes = await GetRemoteData.GetInstance().GetCommuneDataAsync();
-                    if (communes == null)
+                    //getting communes - only if empty
+                    if (_communes.Count == 0)
                     {
-                        Log.Error("Error encountered while getting communes.");
-                    }
-                    else
-                    {
-                        Log.Information("Communes downloaded: {0}.", communes.Count());
-                        if (communes.Count() > 0)
+                        var communes = await GetRemoteData.GetInstance().GetCommuneDataAsync();
+                        if (communes == null)
                         {
-                            lock (Module1._Lock)
+                            Log.Error("Error encountered while getting communes.");
+                        }
+                        else
+                        {
+                            Log.Information("Communes downloaded: {0}.", communes.Count());
+                            if (communes.Count() > 0)
                             {
-                                _communes.Clear();
-                                _communes.AddRange(communes);
+                                lock (Module1._Lock)
+                                {
+                                    _communes.Clear();
+                                    _communes.AddRange(communes);
+                                }
                             }
                         }
                     }
 
-                    //getting region - use a local list
-                    var regions = await GetRemoteData.GetInstance().GetRegionDataAsync();
-                    if (regions == null)
-                    {
-                        Log.Error("Error encountered while getting regions.");
-                    }
-                    else
-                    {
-                        Log.Information("Communes downloaded: {0}.", regions.Count());
-                        if (regions.Count() > 0)
+                    if (_regions.Count == 0) {
+
+                        //getting region - only if empty
+                        var regions = await GetRemoteData.GetInstance().GetRegionDataAsync();
+                        if (regions == null)
                         {
-                            lock (Module1._Lock)
+                            Log.Error("Error encountered while getting regions.");
+                        }
+                        else
+                        {
+                            Log.Information("Communes downloaded: {0}.", regions.Count());
+                            if (regions.Count() > 0)
                             {
-                                _regions.Clear();
-                                _regions.AddRange(regions);
+                                lock (Module1._Lock)
+                                {
+                                    _regions.Clear();
+                                    _regions.AddRange(regions);
+                                }
                             }
                         }
                     }
+                    
 
                     //initialize constants
                     await QueuedTask.Run(() =>
@@ -178,7 +185,7 @@ namespace ULDKClient
                     .WriteTo.Sink(detector)
                     .CreateLogger();
 
-            Log.Information("ULDK plugin v.1.0.");
+            Log.Information("ULDK plugin v.1.0.0.");
             Log.Information("Project URL is: " + projectParentFolder);
 
 
@@ -344,6 +351,7 @@ namespace ULDKClient
                         //parcel with the specified id does not exist
                         if (parcel == null)
                         {
+                            BusyVisibility = Visibility.Collapsed;
                             MessageBox.Show(Properties.Resources.PARCEL_ID_NOT_EXIST_ERROR);
                             Log.Information("Cannot find parcel with the id: " + ParcelIdFull);
                             return;

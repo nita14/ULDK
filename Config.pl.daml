@@ -1,6 +1,6 @@
 ﻿<ArcGIS defaultAssembly="ULDKClient.dll" defaultNamespace="ULDKClient" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
   <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.2.49743">
-    <Name>GUGiK Client</Name>
+    <Name>ULDK Client</Name>
     <Description>ArcGIS Pro Add-in to consume GUGIK services and APIs.</Description>
     <Image>Images\ULDK.png</Image>
     <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
@@ -12,7 +12,7 @@
     <insertModule id="ULDKClient_Module" className="Module1" autoLoad="true" caption="Module1">
       <!-- uncomment to have the control hosted on a separate tab-->
       <tabs>
-        <tab id="ULDKClient_Tab1" caption="GUGiK" keytip="Pokaż panel GUGiK">
+        <tab id="ULDKClient_Tab1" caption="GUGiK" keytip="Pokaż panel GUGiK" condition="esri_mapping_mapPane">
           <group refID="ULDKClient_Group1" />
           <group refID="ULDKClient_GroupSketch" />
           <group refID="ULDKClient_WMS" />
@@ -38,7 +38,7 @@
       </groups>
       <controls>
         <!-- add your controls here -->
-        <button id="ULDKClient_ULDKDockpane_ShowButton" caption="Pokaż panel ULDK" className="ULDKDockpane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EvaluateFeatures32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EvaluateFeatures32.png">
+        <button id="ULDKClient_ULDKDockpane_ShowButton" caption="Pokaż panel ULDK" className="ULDKDockpane_ShowButton" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EvaluateFeatures32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/EvaluateFeatures32.png" condition="esri_mapping_mapPane"> 
           <tooltip heading="ULDK dockpane">Aktywuje panel z Usługą lokalizacji działek ewidencyjnych (ULDK).<disabledText /></tooltip>
         </button>
         <tool id="ULDKClient_SketchPoint" caption="Narysuj punkt" className="SketchPoint" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/RasterOrthoControlPoint32.png" condition="esri_mapping_mapPane">
@@ -53,14 +53,14 @@
           <tooltip heading="Narysuj poligon">
             Kliknij, aby narysować poligon na mapie.<disabledText /></tooltip>
         </tool>
-        <button id="ULDKClient_AddKIEGWMSToMap" caption="Dodaj/Usuń KIEG" className="AddKIEGWMSToMap" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/LayerTopology32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/LayerTopology32.png">
+        <button id="ULDKClient_AddKIEGWMSToMap" caption="Dodaj/Usuń KIEG" className="AddKIEGWMSToMap" loadOnClick="true" smallImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/LayerTopology32.png" largeImage="pack://application:,,,/ArcGIS.Desktop.Resources;component/Images/LayerTopology32.png" condition="esri_mapping_mapPane">
           <tooltip heading="Dodaj/Usuń KIEG">
             Dodaje lub usuwa WMS KIEG z aktywnej mapy<disabledText />
           </tooltip>
         </button>
       </controls>
       <dockPanes>
-        <dockPane id="ULDKClient_ULDKDockpane" caption="Usługa lokalizacji działek ewidencyjnych (ULDK)" className="ULDKDockpaneViewModel" dock="group" dockWith="esri_core_projectDockPane" hasHelp="true">
+        <dockPane id="ULDKClient_ULDKDockpane" caption="Usługa lokalizacji działek ewidencyjnych (ULDK)" className="ULDKDockpaneViewModel" dock="group" dockWith="esri_core_projectDockPane" hasHelp="true" condition="esri_mapping_mapPane">
           <content className="ULDKDockpaneView" />
         </dockPane>
       </dockPanes>
