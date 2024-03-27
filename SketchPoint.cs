@@ -1,4 +1,5 @@
 ﻿using ArcGIS.Core.Geometry;
+using ArcGIS.Desktop.Editing;
 using ArcGIS.Desktop.Framework;
 using ArcGIS.Desktop.Framework.Contracts;
 using ArcGIS.Desktop.Framework.Threading.Tasks;
@@ -52,8 +53,11 @@ namespace ULDKClient
 
 				//get parcel
 				Parcel parcel = await GetRemoteData.GetInstance().GetParcelByPointAsync(point);
-				//add parcel to graphics layer
-				bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(ULDKDockpaneViewModel._graphicsLayer, parcel.Geom, parcel.Id);
+
+				//no results
+				if (parcel == null) { (pane as ULDKDockpaneViewModel).BusyVisibility = Visibility.Collapsed; }
+                //add parcel to graphics layer
+                bool isGraphicadded = await Helpers.AddGeometrytoGraphicLayerAsync(ULDKDockpaneViewModel._graphicsLayer, parcel.Geom, parcel.Id);
 				if (isGraphicadded)
 				{
 					Log.Information("Parcel added to graphics layer.");

@@ -97,7 +97,7 @@ namespace ULDKClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please draw a line whose length is less than 1 kilometer. Trying to be graceful to ULDK servers....
+        ///   Looks up a localized string similar to Please draw a line whose length is less than 1 kilometer. ULDK does not support well batch downloads..
         /// </summary>
         public static string SKETCH_LINE_LENGTH_OVER_LIMIT {
             get {
@@ -106,7 +106,7 @@ namespace ULDKClient.Properties {
         }
         
         /// <summary>
-        ///   Looks up a localized string similar to Please draw a polygon whose area is less than 1 square kilometer (1 km x1 km). Trying to be graceful to ULDK servers....
+        ///   Looks up a localized string similar to Please draw a polygon whose area is less than 1 square kilometer (1 km x1 km). ULDK does not support well batch downloads..
         /// </summary>
         public static string SKETCH_POLYGON_AREA_OVER_LIMIT {
             get {

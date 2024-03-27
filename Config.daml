@@ -1,11 +1,11 @@
 ﻿<ArcGIS defaultAssembly="ULDKClient.dll" defaultNamespace="ULDKClient" xmlns="http://schemas.esri.com/DADF/Registry" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://schemas.esri.com/DADF/Registry file:///C:/Program%20Files/ArcGIS/Pro/bin/ArcGIS.Desktop.Framework.xsd">
-  <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0" desktopVersion="3.2.49743">
+  <AddInInfo id="{c2412fc7-d52c-4cf7-9901-ad2e1e18fddc}" version="1.0.1" desktopVersion="3.2.49743">
     <Name>ULDK Client</Name>
     <Description>ArcGIS Pro Add-in to consume GUGiK services and APIs.</Description>
     <Image>Images\ULDK.png</Image>
     <Author>Adam Nicinski, adamnicinski@hotmail.com</Author>
     <Company>Private</Company>
-    <Date>24/03/2024</Date>
+    <Date>27/03/2024</Date>
     <Subject>GUGiK/ULDK Client</Subject>
   </AddInInfo>
   <modules>

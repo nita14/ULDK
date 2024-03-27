@@ -18,7 +18,7 @@
         public static int POLYGON_MAX_AREA_SQ_METERS = 1000000;
         public static string GEOPORTAL_LOCATE_PARCEL_URL = @"https://mapy.geoportal.gov.pl/imap/?identifyParcel=";
         public static string KIEG_WMS_URL = @"https://integracja.gugik.gov.pl/cgi-bin/KrajowaIntegracjaEwidencjiGruntow";
-        public static string REPO_URL = @"https://github.com/nita14/ULDK#readme";
+        public static string REPO_URL = @"https://github.com/nita14/ULDK/blob/master/Docs/ULDK_instrukcja_obs%C5%82ugi.pdf";
 
 
 

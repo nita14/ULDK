@@ -130,10 +130,10 @@
     <value>Nie można znaleźć działki o podanym numerze. Sprawdź czy jest on poprawny.</value>
   </data>
   <data name="SKETCH_LINE_LENGTH_OVER_LIMIT" xml:space="preserve">
-    <value>Narysuj linię, której długość jest mniejsza od 1 kilometra. Bądź litościwy dla serwerów ULDK...</value>
+    <value>Narysuj linię, której długość jest mniejsza od 1 kilometra. ULDK nie służy do wsadowego pobierania działek ewidencyjnych.</value>
   </data>
   <data name="SKETCH_POLYGON_AREA_OVER_LIMIT" xml:space="preserve">
-    <value>Narysuj poligon, którego pole powierzchni jest mniejsze od 1 kilometra kwadratowego (1 km x 1 km). Bądź litościwy dla serwerów ULDK...</value>
+    <value>Narysuj poligon, którego pole powierzchni jest mniejsze od 1 kilometra kwadratowego (1 km x 1 km). ULDK nie służy do wsadowego pobierania działek ewidencyjnych.</value>
   </data>
   <data name="UI_CURSOR_STATUS" xml:space="preserve">
     <value>Status:</value>

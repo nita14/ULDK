@@ -41,7 +41,7 @@ First, check the logs created in _<project_path>/GUGIK_ folder. Logs are created
 2) Send me an e-mail (adamnicinski[@]hotmail.com) with the description and zipped logs (as discribed above).
 
 ## Version history
-
+- v. 1.0.1 - Bug #1 fix (regional settings). 27 March 2024. [Link](https://github.com/nita14/ULDK/releases/download/v1.0.1/ULDKClient.esriAddinX) 
 - v. 1.0.0 - Initial release. ArcGIS Pro 3.2. March 2024. [Link](https://github.com/nita14/ULDK/releases/download/v1.0.0/ULDKClient.esriAddinX) 
 
 

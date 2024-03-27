@@ -185,7 +185,7 @@ namespace ULDKClient
                     .WriteTo.Sink(detector)
                     .CreateLogger();
 
-            Log.Information("ULDK plugin v.1.0.0.");
+            Log.Information("ULDK plugin v.1.0.1");
             Log.Information("Project URL is: " + projectParentFolder);
 
 

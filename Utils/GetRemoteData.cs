@@ -263,7 +263,7 @@ namespace ULDKClient.Utils
                 //Get data from the endpoint 
 
                 Log.Information("Preparing GetParcelByPointAsync request...");
-                string requestCoords = point.Coordinate2D.X.ToString() + "," + point.Coordinate2D.Y.ToString() + "," + point.SpatialReference.LatestWkid.ToString();
+                string requestCoords = point.Coordinate2D.X.ToString(CultureInfo.InvariantCulture) + "," + point.Coordinate2D.Y.ToString(CultureInfo.InvariantCulture) + "," + point.SpatialReference.LatestWkid.ToString(CultureInfo.InvariantCulture);
 
                 Log.Information("Request URL is: " + Constants.FIND_PARCEL_BY_MAP_POINT_ULDK_URL + requestCoords);
                 EsriHttpResponseMessage responseMessage = _esriHttpClient.Get(Constants.FIND_PARCEL_BY_MAP_POINT_ULDK_URL + requestCoords);
